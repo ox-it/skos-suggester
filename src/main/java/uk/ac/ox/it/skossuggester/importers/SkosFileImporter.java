@@ -37,7 +37,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         
     }
     
-    private SolrDocument getDocument(Resource res) {
+    protected SolrDocument getDocument(Resource res) {
         SolrDocument doc = new SolrDocument();
         
         return doc;
