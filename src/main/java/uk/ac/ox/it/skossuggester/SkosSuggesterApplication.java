@@ -3,6 +3,7 @@ package uk.ac.ox.it.skossuggester;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 import uk.ac.ox.it.skossuggester.health.SolrHealth;
 import uk.ac.ox.it.skossuggester.importers.SkosFileImporter;
@@ -19,6 +20,7 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
 
     @Override
     public void run(AppConfiguration configuration, Environment environment) throws Exception {
+        environment.servlets().addFilter("/*", CrossOriginFilter.class);
         final Suggest suggest = new Suggest();
         final Search search = new Search();
         final Get get = new Get();
