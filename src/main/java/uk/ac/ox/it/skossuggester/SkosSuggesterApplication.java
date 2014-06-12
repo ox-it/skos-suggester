@@ -5,6 +5,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 import uk.ac.ox.it.skossuggester.health.SolrHealth;
+import uk.ac.ox.it.skossuggester.importers.SkosFileImporter;
 import uk.ac.ox.it.skossuggester.resources.Get;
 import uk.ac.ox.it.skossuggester.resources.Search;
 import uk.ac.ox.it.skossuggester.resources.Suggest;
@@ -13,7 +14,7 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
 
     @Override
     public void initialize(Bootstrap<AppConfiguration> bootstrap) {
-        // nothing yet
+        bootstrap.addCommand(new SkosFileImporter());
     }
 
     @Override
