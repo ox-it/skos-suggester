@@ -1,4 +1,4 @@
-package uk.ac.ox.it.skossuggester.importers;
+package uk.ac.ox.it.skossuggester.cli;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
