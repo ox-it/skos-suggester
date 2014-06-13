@@ -5,8 +5,8 @@
     <artifactId>skos-suggester</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>skos-sugester</name>
-    <url>https://github.com/ox-it/skos-sugester</url>
+    <name>skos-suggester</name>
+    <url>https://github.com/ox-it/skos-suggester</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <dropwizard.version>0.7.0</dropwizard.version>
