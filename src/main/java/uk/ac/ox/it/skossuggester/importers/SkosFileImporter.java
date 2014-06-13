@@ -3,15 +3,19 @@ package uk.ac.ox.it.skossuggester.importers;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.RDF;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
+import net.sourceforge.argparse4j.inf.Subparser;
 import org.apache.solr.common.SolrDocument;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 
@@ -25,8 +29,18 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     }
     
     @Override
+    public void configure(Subparser subparser) {
+        super.configure(subparser);
+        subparser.addArgument("-f", "--file")
+                 .action(Arguments.store())
+                 .dest("file")
+                 .help("File to be parsed");
+        subparser.addArgument("names").nargs("*");
+    }
+    
+    @Override
     protected void run(Bootstrap<AppConfiguration> bootstrap, Namespace namespace, AppConfiguration configuration) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.importFile(namespace.getString("file"));
     }
     
     private void importFile(String location) {
@@ -35,7 +49,16 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         if (in == null) {
             throw new IllegalArgumentException("File: " + location + " not found");
         }
-        model.read(in, null);
+        model.read(in, null, "N-TRIPLE");
+
+        Resource topic = model.createResource("http://schema.org/Topic");
+        List<SolrDocument> documents = new ArrayList<SolrDocument>();
+        
+        ResIterator it = model.listSubjectsWithProperty(RDF.type, topic);
+        
+        while (it.hasNext()) {
+            documents.add(this.getDocument(it.nextResource()));
+        }
         
         // iterate over Resources having rdf:type schema.org/Topic
         
