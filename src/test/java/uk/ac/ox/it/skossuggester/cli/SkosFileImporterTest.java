@@ -4,11 +4,14 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import java.util.Collection;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
-import org.junit.Test;
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.common.SolrInputField;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class SkosFileImporterTest {
     
@@ -30,10 +33,10 @@ public class SkosFileImporterTest {
         }
         
         SkosFileImporter sfi = new SkosFileImporter();
-        SolrDocument doc = sfi.getDocument(r);
-        List<String> docAltLabels = (List<String>) doc.get("altLabels");
-        
-        assertEquals(doc.get("prefLabel"), prefLabel);
+        SolrInputDocument doc = sfi.getDocument(r);
+        Collection<String> docAltLabels = (Collection) doc.getFieldValues("altLabels");
+
+        assertEquals(doc.getFieldValue("prefLabel"), prefLabel);
         assertThat(docAltLabels, containsInAnyOrder(altLabels));
     }
 }

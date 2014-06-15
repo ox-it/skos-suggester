@@ -12,11 +12,12 @@ import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
-import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 
 
@@ -52,7 +53,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         model.read(in, null, "N-TRIPLE");
 
         Resource topic = model.createResource("http://schema.org/Topic");
-        List<SolrDocument> documents = new ArrayList<SolrDocument>();
+        Collection<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
         
         ResIterator it = model.listSubjectsWithProperty(RDF.type, topic);
         
@@ -64,7 +65,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         
     }
     
-    protected SolrDocument getDocument(Resource res) {
+    protected SolrInputDocument getDocument(Resource res) {
         Model m = ModelFactory.createDefaultModel();
         String nsSkos = "http://www.w3.org/2004/02/skos/core#";
         Property skosPrefLabel = m.createProperty(nsSkos+"prefLabel");
@@ -77,10 +78,10 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
             altLabels.add(s.getString());
         }
         
-        SolrDocument doc = new SolrDocument();
+        SolrInputDocument doc = new SolrInputDocument();
         doc.addField("prefLabel", prefLabel);
         doc.addField("altLabels", altLabels);
-        
+
         return doc;
     }
 }
