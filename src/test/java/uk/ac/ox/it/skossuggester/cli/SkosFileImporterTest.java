@@ -19,7 +19,7 @@ public class SkosFileImporterTest {
 
     @Test
     public void testResourceToSolrDocument() {
-        Resource r = m.createResource();
+        Resource r = m.createResource("http://localhost/test");
         
         String[] altLabels = {"REST (Psychotherapy)", "Environmental stimulation, Restricted"};
         
@@ -32,7 +32,8 @@ public class SkosFileImporterTest {
         Collection<String> docAltLabels = (Collection) doc.getFieldValues("altLabels");
 
         assertThat(docAltLabels, containsInAnyOrder(altLabels));
-
+        assertEquals(doc.getFieldValue("uri"), "http://localhost/test");
+        
         String prefLabel = "Restricted environmental stimulation";
         r.addProperty(skosPrefLabel, prefLabel);
         

@@ -84,6 +84,8 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         Property skosAltLabel = m.createProperty(nsSkos+"altLabel");
         SolrInputDocument doc = new SolrInputDocument();
         
+        doc.addField("uri", res.getURI());
+        
         List<String> altLabels = new ArrayList<String>();
         
         for (Statement s : res.listProperties(skosAltLabel).toList()) {
