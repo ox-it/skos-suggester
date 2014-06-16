@@ -9,6 +9,7 @@
    <field name="prefLabel" type="text_en_splitting" indexed="true" stored="true" required="false" multiValued="false" />
    <field name="altLabels" type="text_en_splitting" indexed="true" stored="true" required="false" multiValued="true" />
    <field name="relatedLabels" type="text_en_splitting" indexed="true" stored="true" required="false" multiValued="true" />
+   <field name="relatedUris" type="string" indexed="true" stored="true" required="false" multiValued="true" /> 
    
    <field name="text" type="text_en_splitting" indexed="true" stored="false" multiValued="true"/>
    

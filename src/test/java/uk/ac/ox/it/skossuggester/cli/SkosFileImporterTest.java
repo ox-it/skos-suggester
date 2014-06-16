@@ -39,6 +39,7 @@ public class SkosFileImporterTest {
         assertThat(docAltLabels, containsInAnyOrder(altLabels));
         assertEquals(doc.getFieldValue("uri"), "http://localhost/test");
         assertEquals(doc.getFieldValue("relatedLabels"), "Related");
+        assertEquals(doc.getFieldValue("relatedUris"), "http://localhost/related");
         
         String prefLabel = "Restricted environmental stimulation";
         r.addProperty(skosPrefLabel, prefLabel);

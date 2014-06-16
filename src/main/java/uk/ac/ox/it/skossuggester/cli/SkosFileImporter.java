@@ -107,6 +107,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         }
         
         List<String> relatedLabels = new ArrayList<String>();
+        List<String> relatedUris = new ArrayList<String>();
         
         Resource related;
         Statement relatedStmt;
@@ -115,10 +116,12 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
             relatedStmt = related.getProperty(RDFS.label);
             if (relatedStmt != null) {
                 relatedLabels.add(relatedStmt.getString());
+                relatedUris.add(related.getURI());
             }
         }
 
         doc.addField("relatedLabels", relatedLabels);
+        doc.addField("relatedUris", relatedUris);
         
         return doc;
     }
