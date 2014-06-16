@@ -13,10 +13,9 @@ import org.junit.Test;
 public class SkosFileImporterTest {
 
     Model m = ModelFactory.createDefaultModel();
-    String nsSkos = "http://www.w3.org/2004/02/skos/core#";
-    Property skosPrefLabel = m.createProperty(nsSkos+"prefLabel");
-    Property skosAltLabel = m.createProperty(nsSkos+"altLabel");
-
+    Property skosPrefLabel = m.createProperty(Skos.PREF_LABEL);
+    Property skosAltLabel = m.createProperty(Skos.ALT_LABEL);
+    
     @Test
     public void testResourceToSolrDocument() {
         Resource r = m.createResource("http://localhost/test");

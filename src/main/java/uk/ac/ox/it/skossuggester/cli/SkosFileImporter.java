@@ -84,9 +84,8 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     
     protected SolrInputDocument getDocument(Resource res) {
         Model m = ModelFactory.createDefaultModel();
-        String nsSkos = "http://www.w3.org/2004/02/skos/core#";
-        Property skosPrefLabel = m.createProperty(nsSkos+"prefLabel");
-        Property skosAltLabel = m.createProperty(nsSkos+"altLabel");
+        Property skosPrefLabel = m.createProperty(Skos.PREF_LABEL);
+        Property skosAltLabel = m.createProperty(Skos.ALT_LABEL);
         SolrInputDocument doc = new SolrInputDocument();
         
         doc.addField("uri", res.getURI());
