@@ -10,6 +10,7 @@ import org.apache.solr.common.SolrInputDocument;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
+import java.io.IOException;
 
 public class SkosFileImporterTest {
 
@@ -47,5 +48,13 @@ public class SkosFileImporterTest {
         doc = sfi.getDocument(r);
 
         assertEquals(doc.getFieldValue("prefLabel"), prefLabel);        
+    }
+    
+    @Test
+    public void testSkosToDocuments() throws IOException {
+        SkosFileImporter sfi = new SkosFileImporter();
+        // using sample file in src/test/resources/skos
+        Collection<SolrInputDocument> docs = sfi.getDocsFromFile("skos/computer_topics.nt", "N-TRIPLE");
+        assertEquals(docs.size(), 4);
     }
 }
