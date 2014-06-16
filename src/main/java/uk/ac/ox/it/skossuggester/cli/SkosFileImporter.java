@@ -27,9 +27,6 @@ import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 
 public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     
-    private Model model;
-    private HttpSolrServer solr;
-    
     public SkosFileImporter() {
         super("skosimport", "Import SKOS file");
     }
@@ -53,36 +50,53 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     
     @Override
     protected void run(Bootstrap<AppConfiguration> bootstrap, Namespace namespace, AppConfiguration configuration) throws Exception {
-        this.solr = new HttpSolrServer(configuration.getSolrLocation());
-        this.importFile(namespace.getString("skosFile"), namespace.getString("fileFormat"));
+        HttpSolrServer solr = new HttpSolrServer(configuration.getSolrLocation());
+        Collection<SolrInputDocument> documents = this.getDocsFromFile(namespace.getString("skosFile"),
+                namespace.getString("fileFormat"));
+        solr.add(documents);
+        solr.commit();   
     }
     
     /**
      * Import a given RDF file to the search index
      * @param location Path of the RDF file
      * @param lang RDF format (RDF/XML, N-TRIPLE, TURTLE or N3)
+     * @return collection of SolrInputDocument
      */
-    private void importFile(String location, String lang) throws SolrServerException, IOException {
-        model = ModelFactory.createDefaultModel();
+    private Collection<SolrInputDocument> getDocsFromFile(String location, String lang) throws SolrServerException, IOException {
+        Model model = ModelFactory.createDefaultModel();
         InputStream in = FileManager.get().open(location);
         if (in == null) {
             throw new IllegalArgumentException("File: " + location + " not found");
         }
         model.read(in, null, lang);
-
-        Resource topic = model.createResource("http://schema.org/Topic");
+        return this.getDocsFromModel(model);
+    }
+    
+    /**
+     * Import a Model
+     * @param m Jena Model
+     * @return collection of SolrInputDocument
+     * @throws SolrServerException
+     * @throws IOException 
+     */
+    private Collection<SolrInputDocument> getDocsFromModel(Model m) throws SolrServerException, IOException {
+        Resource topic = m.createResource("http://schema.org/Topic");
         Collection<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
         
-        ResIterator it = model.listSubjectsWithProperty(RDF.type, topic);
+        ResIterator it = m.listSubjectsWithProperty(RDF.type, topic);
         
         while (it.hasNext()) {
             documents.add(this.getDocument(it.nextResource()));
         }
-
-        this.solr.add(documents);
-        this.solr.commit();
+        return documents;     
     }
     
+    /**
+     * Get a SolrInputDocument from a Resource
+     * @param res Resource to analyse
+     * @return SolrInputDocument to be ingested by Solr
+     */
     protected SolrInputDocument getDocument(Resource res) {
         Model m = ModelFactory.createDefaultModel();
         Property skosPrefLabel = m.createProperty(Skos.PREF_LABEL);
