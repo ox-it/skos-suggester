@@ -63,7 +63,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
      * @param lang RDF format (RDF/XML, N-TRIPLE, TURTLE or N3)
      * @return collection of SolrInputDocument
      */
-    private Collection<SolrInputDocument> getDocsFromFile(String location, String lang) throws SolrServerException, IOException {
+    protected Collection<SolrInputDocument> getDocsFromFile(String location, String lang) {
         Model model = ModelFactory.createDefaultModel();
         InputStream in = FileManager.get().open(location);
         if (in == null) {
@@ -80,7 +80,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
      * @throws SolrServerException
      * @throws IOException 
      */
-    private Collection<SolrInputDocument> getDocsFromModel(Model m) throws SolrServerException, IOException {
+    protected Collection<SolrInputDocument> getDocsFromModel(Model m) {
         Resource topic = m.createResource("http://schema.org/Topic");
         Collection<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
         
