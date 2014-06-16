@@ -15,6 +15,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
+import uk.ac.ox.it.skossuggester.representations.SkosConcept;
 
 @Path("/get")
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,7 +28,7 @@ public class Get {
     }
     
     @GET
-    public String get(@QueryParam("uri") String uri) {
+    public SkosConcept get(@QueryParam("uri") String uri) {
         SolrQuery q = new SolrQuery();
         q.setRequestHandler("/get");
         q.set("id", uri);
@@ -38,8 +39,7 @@ public class Get {
             rsp = req.process(solr);
             SolrDocument out = (SolrDocument)rsp.getResponse().get("doc");
             if (out != null) {
-                return out.toString();
-                //return Tag.fromSolrDocument(out);
+                return SkosConcept.fromSolr(out);
             } else {
                 throw new WebApplicationException(404);
             }
