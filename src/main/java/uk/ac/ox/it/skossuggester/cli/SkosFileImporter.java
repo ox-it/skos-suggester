@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
 import java.io.IOException;
@@ -86,6 +87,8 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         Model m = ModelFactory.createDefaultModel();
         Property skosPrefLabel = m.createProperty(Skos.PREF_LABEL);
         Property skosAltLabel = m.createProperty(Skos.ALT_LABEL);
+        Property skosRelated = m.createProperty(Skos.RELATED);
+
         SolrInputDocument doc = new SolrInputDocument();
         
         doc.addField("uri", res.getURI());
@@ -102,7 +105,21 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         if(prefLabel != null) {
             doc.addField("prefLabel", prefLabel.getString());
         }
+        
+        List<String> relatedLabels = new ArrayList<String>();
+        
+        Resource related;
+        Statement relatedStmt;
+        for (Statement s : res.listProperties(skosRelated).toList()) {
+            related = s.getResource();
+            relatedStmt = related.getProperty(RDFS.label);
+            if (relatedStmt != null) {
+                relatedLabels.add(relatedStmt.getString());
+            }
+        }
 
+        doc.addField("relatedLabels", relatedLabels);
+        
         return doc;
     }
 }

@@ -4,6 +4,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDFS;
 import java.util.Collection;
 import org.apache.solr.common.SolrInputDocument;
 import static org.hamcrest.Matchers.*;
@@ -15,6 +16,7 @@ public class SkosFileImporterTest {
     Model m = ModelFactory.createDefaultModel();
     Property skosPrefLabel = m.createProperty(Skos.PREF_LABEL);
     Property skosAltLabel = m.createProperty(Skos.ALT_LABEL);
+    Property skosRelated = m.createProperty(Skos.RELATED);
     
     @Test
     public void testResourceToSolrDocument() {
@@ -25,6 +27,10 @@ public class SkosFileImporterTest {
         for (String label : altLabels) {
             r.addProperty(skosAltLabel, label);
         }
+
+        Resource relatedResource = m.createResource("http://localhost/related");
+        relatedResource.addProperty(RDFS.label, "Related");
+        r.addProperty(skosRelated, relatedResource);
         
         SkosFileImporter sfi = new SkosFileImporter();
         SolrInputDocument doc = sfi.getDocument(r);
@@ -32,6 +38,7 @@ public class SkosFileImporterTest {
 
         assertThat(docAltLabels, containsInAnyOrder(altLabels));
         assertEquals(doc.getFieldValue("uri"), "http://localhost/test");
+        assertEquals(doc.getFieldValue("relatedLabels"), "Related");
         
         String prefLabel = "Restricted environmental stimulation";
         r.addProperty(skosPrefLabel, prefLabel);
