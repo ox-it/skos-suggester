@@ -34,14 +34,14 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         super.configure(subparser);
         subparser.addArgument("-f", "--file")
                  .action(Arguments.store())
-                 .dest("file")
+                 .dest("skosFile")
                  .help("File to be parsed");
-        subparser.addArgument("names").nargs("*");
     }
     
     @Override
     protected void run(Bootstrap<AppConfiguration> bootstrap, Namespace namespace, AppConfiguration configuration) throws Exception {
-        this.importFile(namespace.getString("file"));
+        this.importFile(namespace.getString("skosFile"));
+        
     }
     
     private void importFile(String location) {
