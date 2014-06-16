@@ -33,24 +33,36 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     public void configure(Subparser subparser) {
         super.configure(subparser);
         subparser.addArgument("-f", "--file")
-                 .action(Arguments.store())
-                 .dest("skosFile")
-                 .help("File to be parsed");
+                .action(Arguments.store())
+                .dest("skosFile")
+                .required(true)
+                .help("File to be parsed");
+        subparser.addArgument("--format")
+                .action(Arguments.store())
+                .dest("fileFormat")
+                .choices("RDF/XML", "N-TRIPLE", "TURTLE", "N3")
+                .setDefault("N-TRIPLE")
+                .required(false)
+                .help("RDF format");
     }
     
     @Override
     protected void run(Bootstrap<AppConfiguration> bootstrap, Namespace namespace, AppConfiguration configuration) throws Exception {
-        this.importFile(namespace.getString("skosFile"));
-        
+        this.importFile(namespace.getString("skosFile"), namespace.getString("fileFormat"));
     }
     
-    private void importFile(String location) {
+    /**
+     * Import a given RDF file to the search index
+     * @param location Path of the RDF file
+     * @param lang RDF format (RDF/XML, N-TRIPLE, TURTLE or N3)
+     */
+    private void importFile(String location, String lang) {
         model = ModelFactory.createDefaultModel();
         InputStream in = FileManager.get().open(location);
         if (in == null) {
             throw new IllegalArgumentException("File: " + location + " not found");
         }
-        model.read(in, null, "N-TRIPLE");
+        model.read(in, null, lang);
 
         Resource topic = model.createResource("http://schema.org/Topic");
         Collection<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
