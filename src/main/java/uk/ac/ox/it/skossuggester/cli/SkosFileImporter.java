@@ -82,17 +82,20 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         String nsSkos = "http://www.w3.org/2004/02/skos/core#";
         Property skosPrefLabel = m.createProperty(nsSkos+"prefLabel");
         Property skosAltLabel = m.createProperty(nsSkos+"altLabel");
+        SolrInputDocument doc = new SolrInputDocument();
         
-        String prefLabel = res.getProperty(skosPrefLabel).getString();
         List<String> altLabels = new ArrayList<String>();
         
         for (Statement s : res.listProperties(skosAltLabel).toList()) {
             altLabels.add(s.getString());
         }
-        
-        SolrInputDocument doc = new SolrInputDocument();
-        doc.addField("prefLabel", prefLabel);
+
         doc.addField("altLabels", altLabels);
+
+        Statement prefLabel = res.getProperty(skosPrefLabel);
+        if(prefLabel != null) {
+            doc.addField("prefLabel", prefLabel.getString());
+        }
 
         return doc;
     }

@@ -11,17 +11,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class SkosFileImporterTest {
-    
+
+    Model m = ModelFactory.createDefaultModel();
+    String nsSkos = "http://www.w3.org/2004/02/skos/core#";
+    Property skosPrefLabel = m.createProperty(nsSkos+"prefLabel");
+    Property skosAltLabel = m.createProperty(nsSkos+"altLabel");
+
     @Test
     public void testResourceToSolrDocument() {
-        Model m = ModelFactory.createDefaultModel();
-        String nsSkos = "http://www.w3.org/2004/02/skos/core#";
-        Property skosPrefLabel = m.createProperty(nsSkos+"prefLabel");
-        Property skosAltLabel = m.createProperty(nsSkos+"altLabel");
-
         Resource r = m.createResource();
-        String prefLabel = "Restricted environmental stimulation";
-        r.addProperty(skosPrefLabel, prefLabel);
         
         String[] altLabels = {"REST (Psychotherapy)", "Environmental stimulation, Restricted"};
         
@@ -33,7 +31,13 @@ public class SkosFileImporterTest {
         SolrInputDocument doc = sfi.getDocument(r);
         Collection<String> docAltLabels = (Collection) doc.getFieldValues("altLabels");
 
-        assertEquals(doc.getFieldValue("prefLabel"), prefLabel);
         assertThat(docAltLabels, containsInAnyOrder(altLabels));
+
+        String prefLabel = "Restricted environmental stimulation";
+        r.addProperty(skosPrefLabel, prefLabel);
+        
+        doc = sfi.getDocument(r);
+
+        assertEquals(doc.getFieldValue("prefLabel"), prefLabel);        
     }
 }
