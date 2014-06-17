@@ -2,7 +2,6 @@ package uk.ac.ox.it.skossuggester.dao;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.WebApplicationException;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.BinaryResponseParser;
@@ -27,48 +26,55 @@ public class SkosConceptsDao {
         this.solr = solr;
     }
     
+    /**
+     * Get a document by its unique ID
+     * @param uri 
+     * @return 
+     */
     public SkosConcept get(String uri) {
         SolrQuery q = new SolrQuery();
         q.setRequestHandler("/get");
         q.set("id", uri);
-        QueryRequest req = new QueryRequest(q);
-        req.setResponseParser(new BinaryResponseParser());
-        QueryResponse rsp;
-        try {
-            rsp = req.process(solr);
-            SolrDocument out = (SolrDocument)rsp.getResponse().get("doc");
-            if (out != null) {
-                return SkosConcept.fromSolr(out);
-            } else {
-                return null;
-            }
-        } catch (SolrServerException ex) {
-            Logger.getLogger(Get.class.getName()).log(Level.SEVERE, null, ex);
+        QueryResponse rsp = this.doQuery(q);
+        SolrDocument out = (SolrDocument)rsp.getResponse().get("doc");
+        if (out != null) {
+            return SkosConcept.fromSolr(out);
+        } else {
+            return null;
         }
-        return null;
     }
     
+    /**
+     * Search for documents by a query string
+     * @param query string to search
+     * @param start first document to retrieve
+     * @param count number of documents to retrieve
+     * @return SkosConcepts
+     */
     public SkosConcepts search(String query, Integer start, Integer count) {
         SolrQuery q = new SolrQuery();
         q.setQuery(query);
         q.setStart(start);
         q.setRows(count);
-        
-        QueryRequest req = new QueryRequest(q);
+        QueryResponse rsp = this.doQuery(q);
+        SolrDocumentList out = rsp.getResults();
+        if (out != null) {
+            return SkosConcepts.fromSolr(out);
+        } else {
+            return null;
+        }
+    }
+    
+    private QueryResponse doQuery(SolrQuery query) {
+        QueryRequest req = new QueryRequest(query);
         req.setResponseParser(new BinaryResponseParser());
         QueryResponse rsp;
         try {
             rsp = req.process(solr);
-            SolrDocumentList out = rsp.getResults();
-            if (out != null) {
-                return SkosConcepts.fromSolr(out);
-            } else {
-                throw new WebApplicationException(404);
-            }
+            return rsp;
         } catch (SolrServerException ex) {
             Logger.getLogger(Get.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-
     }
 }

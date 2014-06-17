@@ -29,13 +29,11 @@ public class SearchTest {
     
     @Before
     public void setup() {
+        concepts = new SkosConcepts();
         SkosConcept concept = new SkosConcept();
         concept.setPrefLabel("PrefLabel");
         concept.setUri("http://uri");
-        List<SkosConcept> skos = new ArrayList<>();
-        skos.add(concept);
-        concepts = new SkosConcepts();
-        concepts.setConcepts(skos);
+        concepts.addConcept(concept);
         when(dao.search(eq("encryption"), eq(0), eq(20))).thenReturn(concepts);
     }
 
