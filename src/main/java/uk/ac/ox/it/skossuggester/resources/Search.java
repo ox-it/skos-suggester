@@ -2,6 +2,7 @@ package uk.ac.ox.it.skossuggester.resources;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,9 +29,14 @@ public class Search {
     }
     
     @GET
-    public SkosConcepts search(@QueryParam("q") String query) {
+    public SkosConcepts search(@QueryParam("q") String query,
+                               @QueryParam("count") @DefaultValue("20") Integer count,
+                               @QueryParam("page") @DefaultValue("0") Integer page) {
         SolrQuery q = new SolrQuery();
         q.setQuery(query);
+        q.setStart(count*page);
+        q.setRows(count);
+        
         QueryRequest req = new QueryRequest(q);
         req.setResponseParser(new BinaryResponseParser());
         QueryResponse rsp;

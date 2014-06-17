@@ -40,6 +40,10 @@ Endpoint for searching SKOS concepts
 
     :query q: search query
     :type uri: string
+    :query count: number of results
+    :type count: int
+    :query page: page (pagination)
+    :type page: int
     
     :statuscode 200: request done
     :statuscode 400: Bad request (if you don't pass the parameter)
