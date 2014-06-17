@@ -5,12 +5,14 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDFS;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Collection;
 import org.apache.solr.common.SolrInputDocument;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import java.io.IOException;
 
 public class SkosFileImporterTest {
 
@@ -54,7 +56,9 @@ public class SkosFileImporterTest {
     public void testSkosToDocuments() throws IOException {
         SkosFileImporter sfi = new SkosFileImporter();
         // using sample file in src/test/resources/skos
-        Collection<SolrInputDocument> docs = sfi.getDocsFromFile("skos/computer_topics.nt", "N-TRIPLE");
+        URL url = this.getClass().getResource("/skos/computer_topics.nt");
+        File f = new File(url.getFile());
+        Collection<SolrInputDocument> docs = sfi.getDocsFromFile(f, "N-TRIPLE");
         assertEquals(docs.size(), 4);
     }
 }

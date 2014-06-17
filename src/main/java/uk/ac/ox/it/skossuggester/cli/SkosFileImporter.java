@@ -11,6 +11,9 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,6 +39,10 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         super.configure(subparser);
         subparser.addArgument("-f", "--file")
                 .action(Arguments.store())
+                .type(Arguments.fileType()
+                        .acceptSystemIn()
+                        .verifyCanRead()
+                        .verifyIsFile())
                 .dest("skosFile")
                 .required(true)
                 .help("File to be parsed");
@@ -51,7 +58,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     @Override
     protected void run(Bootstrap<AppConfiguration> bootstrap, Namespace namespace, AppConfiguration configuration) throws Exception {
         HttpSolrServer solr = new HttpSolrServer(configuration.getSolrLocation());
-        Collection<SolrInputDocument> documents = this.getDocsFromFile(namespace.getString("skosFile"),
+        Collection<SolrInputDocument> documents = this.getDocsFromFile((File)namespace.get("skosFile"),
                 namespace.getString("fileFormat"));
         solr.add(documents);
         solr.commit();   
@@ -59,16 +66,14 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     
     /**
      * Import a given RDF file to the search index
-     * @param location Path of the RDF file
+     * @param file RDF file
      * @param lang RDF format (RDF/XML, N-TRIPLE, TURTLE or N3)
      * @return collection of SolrInputDocument
+     * @throws java.io.FileNotFoundException
      */
-    protected Collection<SolrInputDocument> getDocsFromFile(String location, String lang) {
+    protected Collection<SolrInputDocument> getDocsFromFile(File file, String lang) throws FileNotFoundException {
         Model model = ModelFactory.createDefaultModel();
-        InputStream in = FileManager.get().open(location);
-        if (in == null) {
-            throw new IllegalArgumentException("File: " + location + " not found");
-        }
+        InputStream in = new FileInputStream(file);
         model.read(in, null, lang);
         return this.getDocsFromModel(model);
     }
