@@ -3,6 +3,7 @@ package uk.ac.ox.it.skossuggester.representations;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -11,6 +12,22 @@ public class SkosConcepts {
     
     private List<SkosConcept> concepts;
 
+    public SkosConcepts() {
+        this.concepts = new ArrayList<>();
+    }
+    
+    public SkosConcepts(List<SkosConcept> concepts) {
+        this.concepts = concepts;
+    }
+
+    /**
+     * Add a SkosConcept to the list of concepts
+     * @param concept SkosConcept
+     */
+    public void addConcept(SkosConcept concept) {
+        this.concepts.add(concept);
+    }
+    
     public List<SkosConcept> getConcepts() {
         return concepts;
     }
@@ -21,15 +38,27 @@ public class SkosConcepts {
     
     public static SkosConcepts fromSolr(SolrDocumentList docs) {
         SkosConcepts concepts = new SkosConcepts();
-        List<SkosConcept> skos = new ArrayList<SkosConcept>();
         Iterator<SolrDocument> it = docs.iterator();
         SolrDocument doc;
         while(it.hasNext()) {
             doc = it.next();
-            skos.add(SkosConcept.fromSolr(doc));
+            concepts.addConcept(SkosConcept.fromSolr(doc));
         }
-        
-        concepts.setConcepts(skos);
         return concepts;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof SkosConcepts)) return false;
+        SkosConcepts c = (SkosConcepts)obj;
+        return this.concepts.equals(c.concepts);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(10, 40)
+                .append(concepts)
+                .toHashCode();
     }
 }

@@ -12,6 +12,11 @@ public class SkosConcept {
     private List<String> altLabels;
     private List<Related> related;
 
+    public SkosConcept() {
+        this.altLabels = new ArrayList<>();
+        this.related = new ArrayList<>();
+    }
+    
     public String getUri() {
         return uri;
     }
@@ -79,7 +84,7 @@ public class SkosConcept {
         if (this == obj) return true;
         if (!(obj instanceof SkosConcept)) return false;
         SkosConcept c = (SkosConcept)obj;
-        return this.uri.equals(c.uri) 
+        return this.uri.equals(c.uri)
                 && this.prefLabel.equals(c.prefLabel)
                 && this.altLabels.equals(c.altLabels)
                 && this.related.equals(c.related);
