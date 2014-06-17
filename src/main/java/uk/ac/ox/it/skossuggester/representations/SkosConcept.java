@@ -2,6 +2,7 @@ package uk.ac.ox.it.skossuggester.representations;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.solr.common.SolrDocument;
 
 public class SkosConcept {
@@ -73,4 +74,30 @@ public class SkosConcept {
         return skos;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof SkosConcept)) return false;
+        SkosConcept c = (SkosConcept)obj;
+        return this.uri.equals(c.uri) 
+                && this.prefLabel.equals(c.prefLabel)
+                && this.altLabels.equals(c.altLabels)
+                && this.related.equals(c.related);
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(11, 41)
+                .append(uri)
+                .append(prefLabel)
+                .append(altLabels)
+                .append(related)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "SkosConcept<" + this.uri + ">";
+    }
+
 }
