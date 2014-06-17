@@ -1,0 +1,48 @@
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/2004/02/skos/core#related> <http://id.worldcat.org/fast/906956> .
+<http://id.worldcat.org/fast/956032> <http://schema.org#sameAs> <http://id.loc.gov/authorities/subjects/sh95008935> .
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/2004/02/skos/core#altLabel> "HPC (Computer science)" .
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#fast> .
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/2000/01/rdf-schema#label> "High performance computing" .
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/2004/02/skos/core#prefLabel> "High performance computing" .
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/2004/02/skos/core#related> <http://id.worldcat.org/fast/1138790> .
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#facet-Topical> .
+<http://id.worldcat.org/fast/956032> <http://purl.org/dc/terms/identifier> "956032" .
+<http://id.worldcat.org/fast/956032> <http://schema.org#name> "HPC (Computer science)" .
+<http://id.worldcat.org/fast/956032> <http://schema.org#name> "High performance computing" .
+<http://id.worldcat.org/fast/956032> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Topic> .
+<http://id.worldcat.org/fast/843429> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#fast> .
+<http://id.worldcat.org/fast/843429> <http://www.w3.org/2004/02/skos/core#related> <http://id.worldcat.org/fast/872026> .
+<http://id.worldcat.org/fast/843429> <http://www.w3.org/2004/02/skos/core#prefLabel> "COM (Computer architecture)" .
+<http://id.worldcat.org/fast/843429> <http://purl.org/dc/terms/identifier> "843429" .
+<http://id.worldcat.org/fast/843429> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Topic> .
+<http://id.worldcat.org/fast/843429> <http://schema.org#name> "COM (Computer architecture)" .
+<http://id.worldcat.org/fast/843429> <http://www.w3.org/2004/02/skos/core#altLabel> "Component Object Model (Computer architecture)" .
+<http://id.worldcat.org/fast/843429> <http://www.w3.org/2004/02/skos/core#related> <http://id.worldcat.org/fast/1042803> .
+<http://id.worldcat.org/fast/843429> <http://schema.org#sameAs> <http://id.loc.gov/authorities/subjects/sh98001683> .
+<http://id.worldcat.org/fast/843429> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#facet-Topical> .
+<http://id.worldcat.org/fast/843429> <http://schema.org#name> "Component Object Model (Computer architecture)" .
+<http://id.worldcat.org/fast/872026> <http://www.w3.org/2000/01/rdf-schema#label> "Computer architecture" .
+<http://id.worldcat.org/fast/872026> <http://purl.org/dc/terms/identifier> "872026" .
+<http://id.worldcat.org/fast/872026> <http://www.w3.org/2004/02/skos/core#altLabel> "Architecture, Computer" .
+<http://id.worldcat.org/fast/872026> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#fast> .
+<http://id.worldcat.org/fast/872026> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Topic> .
+<http://id.worldcat.org/fast/872026> <http://schema.org#sameAs> <http://id.loc.gov/authorities/subjects/sh85029479> .
+<http://id.worldcat.org/fast/872026> <http://www.w3.org/2004/02/skos/core#prefLabel> "Computer architecture" .
+<http://id.worldcat.org/fast/872026> <http://schema.org#name> "Computer architecture" .
+<http://id.worldcat.org/fast/872026> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#facet-Topical> .
+<http://id.worldcat.org/fast/872026> <http://schema.org#name> "Architecture, Computer" .
+<http://id.worldcat.org/fast/1042803> <http://www.w3.org/2000/01/rdf-schema#label> "Object-oriented methods (Computer science)" .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#facet-Topical> .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#related> <http://id.worldcat.org/fast/872026> .
+<http://id.worldcat.org/fast/886508> <http://schema.org#sameAs> <http://id.loc.gov/authorities/subjects/sh98001674> .
+<http://id.worldcat.org/fast/886508> <http://purl.org/dc/terms/identifier> "886508" .
+<http://id.worldcat.org/fast/886508> <http://schema.org#name> "DCOM (Computer architecture)" .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#related> <http://id.worldcat.org/fast/1020577> .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://schema.org/Topic> .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#prefLabel> "DCOM (Computer architecture)" .
+<http://id.worldcat.org/fast/886508> <http://schema.org#name> "Distributed COM (Computer architecture)" .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#related> <http://id.worldcat.org/fast/1042803> .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#inScheme> <http://id.worldcat.org/fast/ontology/1.0/#fast> .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#altLabel> "Distributed COM (Computer architecture)" .
+<http://id.worldcat.org/fast/886508> <http://www.w3.org/2004/02/skos/core#altLabel> "Distributed Component Object Model (Computer architecture)" .
+<http://id.worldcat.org/fast/886508> <http://schema.org#name> "Distributed Component Object Model (Computer architecture)" .
