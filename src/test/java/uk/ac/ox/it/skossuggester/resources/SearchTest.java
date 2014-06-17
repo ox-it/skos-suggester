@@ -1,6 +1,7 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.google.common.base.Optional;
+import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -33,9 +34,10 @@ public class SearchTest {
         concept.setPrefLabel("PrefLabel");
         concept.setUri("http://uri");
         concepts.addConcept(concept);
-        when(dao.search(eq("encryption"), eq(0), eq(20))).thenReturn(Optional.of(concepts));
+        when(dao.search(eq("encryption"), any(Integer.class), any(Integer.class)))
+                .thenReturn(Optional.of(concepts));
         Optional<SkosConcepts> none = Optional.absent();
-        when(dao.search(eq("lalala"), eq(0), eq(20))).thenReturn(none);
+        when(dao.search(eq("lalala"), any(Integer.class), any(Integer.class))).thenReturn(none);
     }
 
     @Test
@@ -50,5 +52,26 @@ public class SearchTest {
         SkosConcepts result = resources.client().resource("/search?q=lalala").get(SkosConcepts.class);
         assertEquals(result, new SkosConcepts());   // empty result set
         verify(dao).search("lalala", 0, 20);
+    }
+    
+    @Test
+    public void testSearchPagination() {
+        resources.client().resource("/search?q=encryption&page=2&count=2").get(SkosConcepts.class);
+        verify(dao).search("encryption", 2, 2);
+        resources.client().resource("/search?q=encryption&page=1&count=10").get(SkosConcepts.class);
+        verify(dao).search("encryption", 0, 10);
+        resources.client().resource("/search?q=encryption&page=2&count=10").get(SkosConcepts.class);
+        verify(dao).search("encryption", 10, 10);
+    }
+    
+    @Test
+    public void testPaginationValidation() {
+        ClientResponse response = resources.client()
+                .resource("/search")
+                .queryParam("q", "encryption")
+                .queryParam("page", "0")
+                .queryParam("count", "10")
+                .get(ClientResponse.class);
+        assertEquals(response.getStatus(), 400);
     }
 }
