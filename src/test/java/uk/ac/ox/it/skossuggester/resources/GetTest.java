@@ -1,7 +1,7 @@
 package uk.ac.ox.it.skossuggester.resources;
 
+import com.google.common.base.Optional;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -34,8 +34,9 @@ public class GetTest {
         concept = new SkosConcept();
         concept.setPrefLabel("PrefLabel");
         concept.setUri("http://uri");
-        when(dao.get(eq("http://uri"))).thenReturn(concept);
-        when(dao.get(eq("lalala"))).thenReturn(null);
+        when(dao.get(eq("http://uri"))).thenReturn(Optional.of(concept));
+        Optional<SkosConcept> none = Optional.absent();
+        when(dao.get(eq("lalala"))).thenReturn(none);
     }
 
     @Test

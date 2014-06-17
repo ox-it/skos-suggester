@@ -1,5 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
+import com.google.common.base.Optional;
 import io.dropwizard.jersey.params.IntParam;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -24,11 +25,7 @@ public class Search {
     public SkosConcepts search(@QueryParam("q") String query,
                                @QueryParam("count") @DefaultValue("20") IntParam count,
                                @QueryParam("page") @DefaultValue("0") IntParam page) {
-        SkosConcepts concepts = dao.search(query, page.get()*count.get(), count.get());
-        if (concepts != null) {
-            return concepts;
-        } else {
-            return new SkosConcepts();      // empty list for now?
-        }
+        Optional<SkosConcepts> concepts = dao.search(query, page.get()*count.get(), count.get());
+        return concepts.or(new SkosConcepts());
     }
 }

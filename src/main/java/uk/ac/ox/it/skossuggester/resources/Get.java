@@ -1,5 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
+import com.google.common.base.Optional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -21,9 +22,9 @@ public class Get {
     
     @GET
     public SkosConcept get(@QueryParam("uri") String uri) {
-        SkosConcept concept = this.dao.get(uri);
-        if (concept != null) {
-            return concept;
+        Optional<SkosConcept> concept = this.dao.get(uri);
+        if (concept.isPresent()) {
+            return concept.get();
         } else {
             throw new WebApplicationException(404);
         }

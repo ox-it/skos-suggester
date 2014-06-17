@@ -1,5 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
+import com.google.common.base.Optional;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -32,8 +33,9 @@ public class SearchTest {
         concept.setPrefLabel("PrefLabel");
         concept.setUri("http://uri");
         concepts.addConcept(concept);
-        when(dao.search(eq("encryption"), eq(0), eq(20))).thenReturn(concepts);
-        when(dao.search(eq("lalala"), eq(0), eq(20))).thenReturn(null);
+        when(dao.search(eq("encryption"), eq(0), eq(20))).thenReturn(Optional.of(concepts));
+        Optional<SkosConcepts> none = Optional.absent();
+        when(dao.search(eq("lalala"), eq(0), eq(20))).thenReturn(none);
     }
 
     @Test

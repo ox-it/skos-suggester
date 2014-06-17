@@ -1,5 +1,6 @@
 package uk.ac.ox.it.skossuggester.dao;
 
+import com.google.common.base.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -31,17 +32,18 @@ public class SkosConceptsDao {
      * @param uri 
      * @return 
      */
-    public SkosConcept get(String uri) {
+    public Optional<SkosConcept> get(String uri) {
         SolrQuery q = new SolrQuery();
         q.setRequestHandler("/get");
         q.set("id", uri);
-        QueryResponse rsp = this.doQuery(q);
-        SolrDocument out = (SolrDocument)rsp.getResponse().get("doc");
-        if (out != null) {
-            return SkosConcept.fromSolr(out);
-        } else {
-            return null;
+        Optional<QueryResponse> rsp = this.doQuery(q);
+        if (rsp.isPresent()) {
+            SolrDocument out = (SolrDocument)rsp.get().getResponse().get("doc");
+            if (out != null) {
+                return Optional.of(SkosConcept.fromSolr(out));
+            }
         }
+        return Optional.absent();
     }
     
     /**
@@ -51,30 +53,31 @@ public class SkosConceptsDao {
      * @param count number of documents to retrieve
      * @return SkosConcepts
      */
-    public SkosConcepts search(String query, Integer start, Integer count) {
+    public Optional<SkosConcepts> search(String query, Integer start, Integer count) {
         SolrQuery q = new SolrQuery();
         q.setQuery(query);
         q.setStart(start);
         q.setRows(count);
-        QueryResponse rsp = this.doQuery(q);
-        SolrDocumentList out = rsp.getResults();
-        if (out != null) {
-            return SkosConcepts.fromSolr(out);
-        } else {
-            return null;
+        Optional<QueryResponse> rsp = this.doQuery(q);
+        if(rsp.isPresent()) {
+            SolrDocumentList out = rsp.get().getResults();
+            if (out != null) {
+                return Optional.of(SkosConcepts.fromSolr(out));
+            }
         }
+        return Optional.absent();
     }
     
-    private QueryResponse doQuery(SolrQuery query) {
+    private Optional<QueryResponse> doQuery(SolrQuery query) {
         QueryRequest req = new QueryRequest(query);
         req.setResponseParser(new BinaryResponseParser());
         QueryResponse rsp;
         try {
             rsp = req.process(solr);
-            return rsp;
+            return Optional.of(rsp);
         } catch (SolrServerException ex) {
             Logger.getLogger(Get.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return Optional.absent();
     }
 }
