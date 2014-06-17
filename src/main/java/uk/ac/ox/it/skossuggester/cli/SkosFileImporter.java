@@ -6,7 +6,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import io.dropwizard.cli.ConfiguredCommand;
@@ -14,7 +13,6 @@ import io.dropwizard.setup.Bootstrap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +20,6 @@ import java.util.List;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
@@ -81,13 +78,11 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     /**
      * Import a Model
      * @param m Jena Model
-     * @return collection of SolrInputDocument
-     * @throws SolrServerException
-     * @throws IOException 
+     * @return collection of SolrInputDocument 
      */
     protected Collection<SolrInputDocument> getDocsFromModel(Model m) {
         Resource topic = m.createResource("http://schema.org/Topic");
-        Collection<SolrInputDocument> documents = new ArrayList<SolrInputDocument>();
+        Collection<SolrInputDocument> documents = new ArrayList<>();
         
         ResIterator it = m.listSubjectsWithProperty(RDF.type, topic);
         
@@ -112,7 +107,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         
         doc.addField("uri", res.getURI());
         
-        List<String> altLabels = new ArrayList<String>();
+        List<String> altLabels = new ArrayList<>();
         
         for (Statement s : res.listProperties(skosAltLabel).toList()) {
             altLabels.add(s.getString());
@@ -125,8 +120,8 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
             doc.addField("prefLabel", prefLabel.getString());
         }
         
-        List<String> relatedLabels = new ArrayList<String>();
-        List<String> relatedUris = new ArrayList<String>();
+        List<String> relatedLabels = new ArrayList<>();
+        List<String> relatedUris = new ArrayList<>();
         
         Resource related;
         Statement relatedStmt;
