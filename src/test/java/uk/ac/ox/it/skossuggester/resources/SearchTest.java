@@ -1,8 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import io.dropwizard.testing.junit.ResourceTestRule;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -35,6 +33,7 @@ public class SearchTest {
         concept.setUri("http://uri");
         concepts.addConcept(concept);
         when(dao.search(eq("encryption"), eq(0), eq(20))).thenReturn(concepts);
+        when(dao.search(eq("lalala"), eq(0), eq(20))).thenReturn(null);
     }
 
     @Test
@@ -42,5 +41,12 @@ public class SearchTest {
         SkosConcepts result = resources.client().resource("/search?q=encryption").get(SkosConcepts.class);
         assertEquals(result, concepts);
         verify(dao).search("encryption", 0, 20);
+    }
+    
+    @Test
+    public void testNoResults() {
+        SkosConcepts result = resources.client().resource("/search?q=lalala").get(SkosConcepts.class);
+        assertEquals(result, new SkosConcepts());   // empty result set
+        verify(dao).search("lalala", 0, 20);
     }
 }

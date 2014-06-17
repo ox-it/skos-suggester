@@ -24,6 +24,11 @@ public class Search {
     public SkosConcepts search(@QueryParam("q") String query,
                                @QueryParam("count") @DefaultValue("20") IntParam count,
                                @QueryParam("page") @DefaultValue("0") IntParam page) {
-        return dao.search(query, page.get()*count.get(), count.get());
+        SkosConcepts concepts = dao.search(query, page.get()*count.get(), count.get());
+        if (concepts != null) {
+            return concepts;
+        } else {
+            return new SkosConcepts();      // empty list for now?
+        }
     }
 }
