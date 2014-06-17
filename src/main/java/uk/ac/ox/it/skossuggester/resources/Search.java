@@ -1,5 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
+import io.dropwizard.jersey.params.IntParam;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.DefaultValue;
@@ -30,12 +31,12 @@ public class Search {
     
     @GET
     public SkosConcepts search(@QueryParam("q") String query,
-                               @QueryParam("count") @DefaultValue("20") Integer count,
-                               @QueryParam("page") @DefaultValue("0") Integer page) {
+                               @QueryParam("count") @DefaultValue("20") IntParam count,
+                               @QueryParam("page") @DefaultValue("0") IntParam page) {
         SolrQuery q = new SolrQuery();
         q.setQuery(query);
-        q.setStart(count*page);
-        q.setRows(count);
+        q.setStart(count.get()*page.get());
+        q.setRows(count.get());
         
         QueryRequest req = new QueryRequest(q);
         req.setResponseParser(new BinaryResponseParser());
