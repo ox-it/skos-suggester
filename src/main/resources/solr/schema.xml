@@ -13,11 +13,11 @@
    
    <field name="text" type="text_en_splitting" indexed="true" stored="false" multiValued="true"/>
    
-   <field name="suggestions" type="textSpell" indexed="true" stored="true" multiValued="true" omitTermFreqAndPositions="true" />
+   <field name="suggestions" type="textSpell" indexed="true" stored="false" multiValued="true" omitTermFreqAndPositions="true" />
    
-   <dynamicField name="*_suggest_edge" type="text_suggest_edge" indexed="true" stored="true" multiValued="true"/>
-   <dynamicField name="*_suggest_ngram" type="text_suggest_ngram" indexed="true" stored="true" multiValued="true"/>
-   <dynamicField name="*_suggest" type="text_suggest" indexed="true" stored="true" multiValued="true"/>
+   <dynamicField name="*_suggest_edge" type="text_suggest_edge" indexed="true" stored="false" multiValued="true"/>
+   <dynamicField name="*_suggest_ngram" type="text_suggest_ngram" indexed="true" stored="false" multiValued="true"/>
+   <dynamicField name="*_suggest" type="text_suggest" indexed="true" stored="false" multiValued="true"/>
 
    <field name="prefLabel_sort" type="alphaNumericSort" indexed="true" stored="false" multiValued="false" />
 
