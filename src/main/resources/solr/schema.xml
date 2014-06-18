@@ -13,6 +13,8 @@
    
    <field name="text" type="text_en_splitting" indexed="true" stored="false" multiValued="true"/>
    
+   <field name="suggestions" type="textSpell" indexed="true" stored="true" multiValued="true" omitTermFreqAndPositions="true" />
+   
    <dynamicField name="*_suggest_edge" type="text_suggest_edge" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_suggest_ngram" type="text_suggest_ngram" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_suggest" type="text_suggest" indexed="true" stored="true" multiValued="true"/>
@@ -20,6 +22,10 @@
    <copyField source="prefLabel" dest="text"/>
    <copyField source="altLabels" dest="text"/>
    <copyField source="relatedLabels" dest="text"/>
+   
+   <copyField source="prefLabel" dest="suggestions"/>
+   <copyField source="altLabels" dest="suggestions"/>
+   <copyField source="relatedLabels" dest="suggestions"/>
    
    <copyField source="prefLabel" dest="prefLabel_suggest" />
    <copyField source="prefLabel" dest="prefLabel_suggest_edge" />
@@ -118,7 +124,14 @@
      </analyzer>
    </fieldType>
    
-   
+   <fieldType class="solr.TextField" name="textSpell" positionIncrementGap="100">
+       <analyzer>
+           <tokenizer class="solr.StandardTokenizerFactory"/>
+           <filter class="solr.StandardFilterFactory"/>
+           <filter class="solr.LowerCaseFilterFactory"/>
+       </analyzer>
+    </fieldType>
+
     <!-- The StrField type is not analyzed, but indexed/stored verbatim.
        It supports doc values but in that case the field needs to be
        single-valued and either required or have a default value.
