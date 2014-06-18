@@ -1,6 +1,8 @@
 package uk.ac.ox.it.skossuggester.dao;
 
 import com.google.common.base.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -9,6 +11,7 @@ import org.apache.solr.client.solrj.impl.BinaryResponseParser;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import uk.ac.ox.it.skossuggester.representations.SkosConcept;
@@ -44,6 +47,23 @@ public class SkosConceptsDao {
             }
         }
         return Optional.absent();
+    }
+    
+    public List<String> suggest(String query) {
+        SolrQuery q = new SolrQuery();
+        q.setRequestHandler("/suggest");
+        q.setQuery(query);
+        Optional<QueryResponse> response = this.doQuery(q);
+        if (response.isPresent()) {
+            List<SpellCheckResponse.Suggestion> suggestions = response.get().getSpellCheckResponse().getSuggestions();
+            List<String> results = new ArrayList<>();
+            for (SpellCheckResponse.Suggestion s : suggestions) {
+                results.addAll(s.getAlternatives());
+            }
+            return results;
+        } else {
+            return null;
+        }
     }
     
     /**
