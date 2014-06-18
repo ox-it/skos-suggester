@@ -19,6 +19,8 @@
    <dynamicField name="*_suggest_ngram" type="text_suggest_ngram" indexed="true" stored="true" multiValued="true"/>
    <dynamicField name="*_suggest" type="text_suggest" indexed="true" stored="true" multiValued="true"/>
 
+   <field name="prefLabel_sort" type="alphaNumericSort" indexed="true" stored="false" multiValued="false" />
+
    <copyField source="prefLabel" dest="text"/>
    <copyField source="altLabels" dest="text"/>
    <copyField source="relatedLabels" dest="text"/>
@@ -36,6 +38,8 @@
    <copyField source="relatedLabels" dest="relatedLabels_suggest" />
    <copyField source="relatedLabels" dest="relatedLabels_suggest_edge" />
    <copyField source="relatedLabels" dest="relatedLabels_suggest_ngram" />
+   
+   <copyField source="prefLabel" dest="prefLabel_sort" />
    
    <uniqueKey>uri</uniqueKey>
    

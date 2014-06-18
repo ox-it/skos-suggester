@@ -205,7 +205,8 @@
          <str name="fl">prefLabel,uri</str>
          <str name="qf">prefLabel_suggest^30 prefLabel_suggest_ngram^50.0 altLabels_suggest^15 altLabels_suggest_ngram^25.0 relatedLabels_suggest^15 relatedLabels_suggest_ngram^25.0</str>
          <str name="pf">prefLabel_suggest_edge^50.0 altLabels_suggest_edge^25.0 relatedLabels_suggest_edge^25.0</str>
-<!--         <str name="sort">score desc,title_sort asc</str>-->
+         <!--<str name="sort">score desc,prefLabel_sort asc</str>-->
+         <str name="sort">score desc</str>  <!-- haven't seen any change in results but might be an useful improvement -->
        </lst>
      </requestHandler>
 
