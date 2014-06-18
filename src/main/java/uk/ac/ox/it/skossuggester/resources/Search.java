@@ -8,7 +8,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
-import uk.ac.ox.it.skossuggester.jerseyutils.NotEmptyStringParam;
 import uk.ac.ox.it.skossuggester.jerseyutils.PositiveIntParam;
 import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 
@@ -23,11 +22,18 @@ public class Search {
     }
     
     @GET
-    public SkosConcepts search(@QueryParam("q") NotEmptyStringParam query,
+    public SkosConcepts search(@QueryParam("q") Optional<String> query,
                                @QueryParam("page") @DefaultValue("1") PositiveIntParam page,
                                @QueryParam("count") @DefaultValue("20") PositiveIntParam count) {
-        int firstResult = (page.get()-1)*count.get();
-        Optional<SkosConcepts> concepts = dao.search(query.get(), firstResult, count.get());
-        return concepts.or(new SkosConcepts());
+        // TODO better handling of the query
+        // there seem to be some problems upstream in jersey in bean validation
+        // so this should be revisited at a later date
+        if(query.isPresent()) {
+            int firstResult = (page.get()-1)*count.get();
+            Optional<SkosConcepts> concepts = dao.search(query.get(), firstResult, count.get());
+            return concepts.or(new SkosConcepts());
+        } else {
+            return new SkosConcepts();
+        }
     }
 }
