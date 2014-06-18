@@ -13,12 +13,25 @@
    
    <field name="text" type="text_en_splitting" indexed="true" stored="false" multiValued="true"/>
    
+   <field name="suggestions" type="textSpell" indexed="true" stored="true" multiValued="true" omitTermFreqAndPositions="true" />
+   
    <copyField source="prefLabel" dest="text"/>
    <copyField source="altLabels" dest="text"/>
    <copyField source="relatedLabels" dest="text"/>
    
+   <copyField source="prefLabel" dest="suggestions"/>
+   <copyField source="altLabels" dest="suggestions"/>
+   <copyField source="relatedLabels" dest="suggestions"/>
+   
    <uniqueKey>uri</uniqueKey>
-
+   
+   <fieldType class="solr.TextField" name="textSpell" positionIncrementGap="100">
+       <analyzer>
+           <tokenizer class="solr.StandardTokenizerFactory"/>
+           <filter class="solr.StandardFilterFactory"/>
+           <filter class="solr.LowerCaseFilterFactory"/>
+       </analyzer>
+   </fieldType>
 
     <!-- The StrField type is not analyzed, but indexed/stored verbatim.
        It supports doc values but in that case the field needs to be
