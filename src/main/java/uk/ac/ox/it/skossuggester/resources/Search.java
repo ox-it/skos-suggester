@@ -1,7 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.google.common.base.Optional;
-import io.dropwizard.jersey.params.IntParam;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
+import uk.ac.ox.it.skossuggester.jerseyutils.PositiveIntParam;
 import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 
 @Path("/search")
@@ -22,10 +22,18 @@ public class Search {
     }
     
     @GET
-    public SkosConcepts search(@QueryParam("q") String query,
-                               @QueryParam("count") @DefaultValue("20") IntParam count,
-                               @QueryParam("page") @DefaultValue("0") IntParam page) {
-        Optional<SkosConcepts> concepts = dao.search(query, page.get()*count.get(), count.get());
-        return concepts.or(new SkosConcepts());
+    public SkosConcepts search(@QueryParam("q") Optional<String> query,
+                               @QueryParam("page") @DefaultValue("1") PositiveIntParam page,
+                               @QueryParam("count") @DefaultValue("20") PositiveIntParam count) {
+        // TODO better handling of the query
+        // there seem to be some problems upstream in jersey in bean validation
+        // so this should be revisited at a later date
+        if(query.isPresent()) {
+            int firstResult = (page.get()-1)*count.get();
+            Optional<SkosConcepts> concepts = dao.search(query.get(), firstResult, count.get());
+            return concepts.or(new SkosConcepts());
+        } else {
+            return new SkosConcepts();
+        }
     }
 }
