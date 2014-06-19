@@ -9,6 +9,15 @@ HTTP API
 
     http_api/*
 
+Importers
+=========
+
+.. toctree::
+    :glob:
+    
+    importers/*
+
+
 Indices and tables
 ==================
 
