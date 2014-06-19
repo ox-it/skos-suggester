@@ -49,21 +49,23 @@ public class SkosConceptsDao {
         return Optional.absent();
     }
     
-    public List<String> suggest(String query) {
+    /**
+     * Search for documents by a query string
+     * @param query string to search
+     * @return SkosConcepts
+     */
+    public Optional<SkosConcepts> suggest(String query) {
         SolrQuery q = new SolrQuery();
-        q.setRequestHandler("/suggest");
         q.setQuery(query);
-        Optional<QueryResponse> response = this.doQuery(q);
-        if (response.isPresent()) {
-            List<SpellCheckResponse.Suggestion> suggestions = response.get().getSpellCheckResponse().getSuggestions();
-            List<String> results = new ArrayList<>();
-            for (SpellCheckResponse.Suggestion s : suggestions) {
-                results.addAll(s.getAlternatives());
+        q.setRequestHandler("/suggest");
+        Optional<QueryResponse> rsp = this.doQuery(q);
+        if(rsp.isPresent()) {
+            SolrDocumentList out = rsp.get().getResults();
+            if (out != null) {
+                return Optional.of(SkosConcepts.fromSolr(out));
             }
-            return results;
-        } else {
-            return null;
         }
+        return Optional.absent();
     }
     
     /**

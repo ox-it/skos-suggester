@@ -197,30 +197,19 @@
     </lst>
   </searchComponent>
 
-
-     <searchComponent class="solr.SpellCheckComponent" name="suggest">
-         <lst name="spellchecker">
-             <str name="name">suggest</str>
-             <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-             <str name="lookupImpl">org.apache.solr.spelling.suggest.tst.TSTLookup</str>
-             <str name="field">suggestions</str>  <!-- the indexed field to derive suggestions from -->
-             <float name="threshold">0.005</float>
-             <str name="buildOnCommit">true</str>
-         </lst>
-     </searchComponent>
-
-     <requestHandler class="org.apache.solr.handler.component.SearchHandler" name="/suggest">
-         <lst name="defaults">
-             <str name="spellcheck">true</str>
-             <str name="spellcheck.dictionary">suggest</str>
-             <str name="spellcheck.onlyMorePopular">true</str>
-             <str name="spellcheck.count">5</str>
-             <str name="spellcheck.collate">true</str>
-         </lst>
-         <arr name="components">
-             <str>suggest</str>
-         </arr>
+     <requestHandler name="/suggest" class="solr.SearchHandler">
+       <lst name="defaults">
+         <str name="echoParams">explicit</str>
+         <str name="defType">edismax</str>
+         <str name="rows">10</str>
+         <str name="fl">prefLabel,uri</str>
+         <str name="qf">prefLabel_suggest^30 prefLabel_suggest_ngram^50.0 altLabels_suggest^15 altLabels_suggest_ngram^25.0 relatedLabels_suggest^15 relatedLabels_suggest_ngram^25.0</str>
+         <str name="pf">prefLabel_suggest_edge^50.0 altLabels_suggest_edge^25.0 relatedLabels_suggest_edge^25.0</str>
+         <!--<str name="sort">score desc,prefLabel_sort asc</str>-->
+         <str name="sort">score desc</str>  <!-- haven't seen any change in results but might be an useful improvement -->
+       </lst>
      </requestHandler>
+
 
   <searchComponent name="tvComponent" class="solr.TermVectorComponent"/>
 
