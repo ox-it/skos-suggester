@@ -1,7 +1,8 @@
 Jena TDB importer
 =================
 
-Imports SKOS concepts from a Jena TDB dataset. This is the recommended method if you have 
+Imports SKOS concepts from a Jena TDB dataset. This is the recommended method if you have a fairly large dataset
+(e.g. `FAST (Faceted Application of Subject Terminology) topics <http://fast.oclc.org>`_).
 
 Requirements
 ------------
