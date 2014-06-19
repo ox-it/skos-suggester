@@ -1,6 +1,8 @@
 package uk.ac.ox.it.skossuggester.dao;
 
 import com.google.common.base.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -9,6 +11,7 @@ import org.apache.solr.client.solrj.impl.BinaryResponseParser;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import uk.ac.ox.it.skossuggester.representations.SkosConcept;
@@ -41,6 +44,25 @@ public class SkosConceptsDao {
             SolrDocument out = (SolrDocument)rsp.get().getResponse().get("doc");
             if (out != null) {
                 return Optional.of(SkosConcept.fromSolr(out));
+            }
+        }
+        return Optional.absent();
+    }
+    
+    /**
+     * Search for documents by a query string
+     * @param query string to search
+     * @return SkosConcepts
+     */
+    public Optional<SkosConcepts> suggest(String query) {
+        SolrQuery q = new SolrQuery();
+        q.setQuery(query);
+        q.setRequestHandler("/suggest");
+        Optional<QueryResponse> rsp = this.doQuery(q);
+        if(rsp.isPresent()) {
+            SolrDocumentList out = rsp.get().getResults();
+            if (out != null) {
+                return Optional.of(SkosConcepts.fromSolr(out));
             }
         }
         return Optional.absent();
