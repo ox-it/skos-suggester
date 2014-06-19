@@ -56,6 +56,9 @@ public class SkosConceptsDao {
     public Optional<SkosConcepts> search(String query, Integer start, Integer count) {
         SolrQuery q = new SolrQuery();
         q.setQuery(query);
+        q.set("defType", "edismax");
+        // boosting per field
+        q.set("qf", "prefLabel^5 altLabels^2 relatedLabels^1");
         q.setStart(start);
         q.setRows(count);
         Optional<QueryResponse> rsp = this.doQuery(q);
