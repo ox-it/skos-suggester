@@ -5,7 +5,7 @@ Endpoint for suggesting SKOS concepts
 
 Mainly used for type-ahead
 
-.. http:get:: /search
+.. http:get:: /suggest
 
     Suggest SKOS concepts
 
