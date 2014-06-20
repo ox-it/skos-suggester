@@ -1,6 +1,8 @@
 package uk.ac.ox.it.skossuggester.dao;
 
 import com.google.common.base.Optional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -9,6 +11,7 @@ import org.apache.solr.client.solrj.impl.BinaryResponseParser;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import uk.ac.ox.it.skossuggester.representations.SkosConcept;
@@ -49,6 +52,25 @@ public class SkosConceptsDao {
     /**
      * Search for documents by a query string
      * @param query string to search
+     * @return SkosConcepts
+     */
+    public Optional<SkosConcepts> suggest(String query) {
+        SolrQuery q = new SolrQuery();
+        q.setQuery(query);
+        q.setRequestHandler("/suggest");
+        Optional<QueryResponse> rsp = this.doQuery(q);
+        if(rsp.isPresent()) {
+            SolrDocumentList out = rsp.get().getResults();
+            if (out != null) {
+                return Optional.of(SkosConcepts.fromSolr(out));
+            }
+        }
+        return Optional.absent();
+    }
+    
+    /**
+     * Search for documents by a query string
+     * @param query string to search
      * @param start first document to retrieve
      * @param count number of documents to retrieve
      * @return SkosConcepts
@@ -56,6 +78,9 @@ public class SkosConceptsDao {
     public Optional<SkosConcepts> search(String query, Integer start, Integer count) {
         SolrQuery q = new SolrQuery();
         q.setQuery(query);
+        q.set("defType", "edismax");
+        // boosting per field
+        q.set("qf", "prefLabel^5 altLabels^2 relatedLabels^1");
         q.setStart(start);
         q.setRows(count);
         Optional<QueryResponse> rsp = this.doQuery(q);

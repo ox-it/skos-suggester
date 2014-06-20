@@ -27,7 +27,7 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
         environment.servlets().addFilter("/*", CrossOriginFilter.class);
         final HttpSolrServer solr = new HttpSolrServer(configuration.getSolrLocation());
         final SkosConceptsDao dao = new SkosConceptsDao(solr);
-        final Suggest suggest = new Suggest();
+        final Suggest suggest = new Suggest(dao);
         final Search search = new Search(dao);
         final Get get = new Get(dao);
         environment.jersey().register(suggest);
