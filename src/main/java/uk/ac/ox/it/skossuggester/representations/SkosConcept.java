@@ -56,7 +56,7 @@ public class SkosConcept {
             skos.setPrefLabel((String) doc.getFieldValue("prefLabel"));
         }
 
-        List<String> altLabels = new ArrayList<String>();
+        List<String> altLabels = new ArrayList<>();
         if(doc.containsKey("altLabels")) {
             for(Object o : doc.getFieldValues("altLabels")) {
                 altLabels.add(o.toString());
@@ -68,7 +68,7 @@ public class SkosConcept {
             List<Object> relatedLabels = new ArrayList(doc.getFieldValues("relatedLabels"));
             List<Object> relatedUris = new ArrayList(doc.getFieldValues("relatedUris"));
 
-            List<Related> rels = new ArrayList<Related>();
+            List<Related> rels = new ArrayList<>();
             for (int i = 0; i < relatedLabels.size(); i++) {
                 String label = (String)relatedLabels.get(i);
                 String uri = (String)relatedUris.get(i);
