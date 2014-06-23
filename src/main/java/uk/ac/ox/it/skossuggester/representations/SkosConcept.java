@@ -48,6 +48,14 @@ public class SkosConcept {
     public void setRelated(List<Related> related) {
         this.related = related;
     }
+    
+    public void addRelated(Related related) {
+        this.related.add(related);
+    }
+    
+    public void addAltLabel(String label) {
+        this.altLabels.add(label);
+    }
         
     public static SkosConcept fromSolr(SolrDocument doc) {
         SkosConcept skos = new SkosConcept();
@@ -56,25 +64,21 @@ public class SkosConcept {
             skos.setPrefLabel((String) doc.getFieldValue("prefLabel"));
         }
 
-        List<String> altLabels = new ArrayList<>();
         if(doc.containsKey("altLabels")) {
             for(Object o : doc.getFieldValues("altLabels")) {
-                altLabels.add(o.toString());
+                skos.addAltLabel(o.toString());
             }
-            skos.setAltLabels(altLabels);            
         }
 
         if(doc.containsKey("relatedLabels") && doc.containsKey("relatedUris")) {
             List<Object> relatedLabels = new ArrayList(doc.getFieldValues("relatedLabels"));
             List<Object> relatedUris = new ArrayList(doc.getFieldValues("relatedUris"));
 
-            List<Related> rels = new ArrayList<>();
             for (int i = 0; i < relatedLabels.size(); i++) {
                 String label = (String)relatedLabels.get(i);
                 String uri = (String)relatedUris.get(i);
-                rels.add(new Related(label, uri));
+                skos.addRelated(new Related(label, uri));
             }
-            skos.setRelated(rels);
         }
         return skos;
     }

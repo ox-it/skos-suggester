@@ -25,13 +25,9 @@ public class SkosConceptTest {
         final SkosConcept concept = new SkosConcept();
         concept.setUri("http://id.worldcat.org/fast/887935");
         concept.setPrefLabel("Data encryption (Computer science)");
-        List<String> altLabels = new ArrayList<>();
-        altLabels.add("Encryption of data (Computer science)");
-        altLabels.add("Data encoding (Computer science)");
-        concept.setAltLabels(altLabels);
-        List<Related> related = new ArrayList<>();
-        related.add(new Related("Computer security", "http://id.worldcat.org/fast/872484"));
-        concept.setRelated(related);
+        concept.addAltLabel("Encryption of data (Computer science)");
+        concept.addAltLabel("Data encoding (Computer science)");
+        concept.addRelated(new Related("Computer security", "http://id.worldcat.org/fast/872484"));
         return concept;
     }
     
