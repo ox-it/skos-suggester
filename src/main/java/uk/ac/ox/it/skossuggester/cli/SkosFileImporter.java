@@ -2,12 +2,9 @@ package uk.ac.ox.it.skossuggester.cli;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
 import java.io.File;
@@ -16,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
@@ -87,56 +83,8 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
         ResIterator it = m.listSubjectsWithProperty(RDF.type, topic);
         
         while (it.hasNext()) {
-            documents.add(this.getDocument(it.nextResource()));
+            documents.add(Skos.getDocument(it.nextResource()));
         }
         return documents;     
-    }
-    
-    /**
-     * Get a SolrInputDocument from a Resource
-     * @param res Resource to analyse
-     * @return SolrInputDocument to be ingested by Solr
-     */
-    protected SolrInputDocument getDocument(Resource res) {
-        Model m = ModelFactory.createDefaultModel();
-        Property skosPrefLabel = m.createProperty(Skos.PREF_LABEL);
-        Property skosAltLabel = m.createProperty(Skos.ALT_LABEL);
-        Property skosRelated = m.createProperty(Skos.RELATED);
-
-        SolrInputDocument doc = new SolrInputDocument();
-        
-        doc.addField("uri", res.getURI());
-        
-        List<String> altLabels = new ArrayList<>();
-        
-        for (Statement s : res.listProperties(skosAltLabel).toList()) {
-            altLabels.add(s.getString());
-        }
-
-        doc.addField("altLabels", altLabels);
-
-        Statement prefLabel = res.getProperty(skosPrefLabel);
-        if(prefLabel != null) {
-            doc.addField("prefLabel", prefLabel.getString());
-        }
-        
-        List<String> relatedLabels = new ArrayList<>();
-        List<String> relatedUris = new ArrayList<>();
-        
-        Resource related;
-        Statement relatedStmt;
-        for (Statement s : res.listProperties(skosRelated).toList()) {
-            related = s.getResource();
-            relatedStmt = related.getProperty(RDFS.label);
-            if (relatedStmt != null) {
-                relatedLabels.add(relatedStmt.getString());
-                relatedUris.add(related.getURI());
-            }
-        }
-
-        doc.addField("relatedLabels", relatedLabels);
-        doc.addField("relatedUris", relatedUris);
-        
-        return doc;
     }
 }

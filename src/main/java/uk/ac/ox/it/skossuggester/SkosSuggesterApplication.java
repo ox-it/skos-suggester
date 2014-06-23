@@ -8,6 +8,7 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 import uk.ac.ox.it.skossuggester.health.SolrHealth;
 import uk.ac.ox.it.skossuggester.cli.SkosFileImporter;
+import uk.ac.ox.it.skossuggester.cli.TdbImporter;
 import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
 import uk.ac.ox.it.skossuggester.resources.Get;
 import uk.ac.ox.it.skossuggester.resources.Search;
@@ -18,6 +19,7 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
     @Override
     public void initialize(Bootstrap<AppConfiguration> bootstrap) {
         bootstrap.addCommand(new SkosFileImporter());
+        bootstrap.addCommand(new TdbImporter());
     }
 
     @Override
