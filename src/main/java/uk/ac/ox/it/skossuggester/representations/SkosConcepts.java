@@ -3,7 +3,7 @@ package uk.ac.ox.it.skossuggester.representations;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.google.common.base.Objects;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -57,8 +57,6 @@ public class SkosConcepts {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(10, 40)
-                .append(concepts)
-                .toHashCode();
+        return Objects.hashCode(concepts);
     }
 }

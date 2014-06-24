@@ -1,6 +1,6 @@
 package uk.ac.ox.it.skossuggester.representations;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.google.common.base.Objects;
 
 /**
  * Represents a skos:related concept
@@ -44,12 +44,12 @@ public class Related {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(12, 42).append(label).append(uri).toHashCode();
+        return Objects.hashCode(label, uri);
     }
 
     @Override
     public String toString() {
-        return this.label + " (" + this.uri + ")";
+        return Objects.toStringHelper(this).add("uri", this.uri).toString();
     }
     
 }
