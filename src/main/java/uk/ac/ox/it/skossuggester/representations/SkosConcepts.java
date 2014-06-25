@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import com.google.common.base.Objects;
+import com.theoryinpractise.halbuilder.DefaultRepresentationFactory;
+import com.theoryinpractise.halbuilder.api.Representation;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
@@ -45,6 +47,11 @@ public class SkosConcepts {
             concepts.addConcept(SkosConcept.fromSolr(doc));
         }
         return concepts;
+    }
+    
+    public Representation asHal() {
+        Representation r = new DefaultRepresentationFactory().newRepresentation().withBean(this.concepts).withLink("self", "/kskk");
+        return r;
     }
     
     @Override
