@@ -49,12 +49,16 @@ public class SkosConceptsDao {
     /**
      * Search for documents by a query string
      * @param query string to search
+     * @param start first document to retrieve
+     * @param count number of documents to retrieve
      * @return SkosConcepts
      */
-    public Optional<SkosConcepts> suggest(String query) {
+    public Optional<SkosConcepts> suggest(String query, Integer start, Integer count) {
         SolrQuery q = new SolrQuery();
         q.setQuery(query);
         q.setRequestHandler("/suggest");
+        q.setStart(start);
+        q.setRows(count);
         Optional<QueryResponse> rsp = this.doQuery(q);
         if(rsp.isPresent()) {
             SolrDocumentList out = rsp.get().getResults();

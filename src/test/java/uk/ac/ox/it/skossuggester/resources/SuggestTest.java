@@ -33,13 +33,13 @@ public class SuggestTest {
         concept.setPrefLabel("Computer Security");
         concept.setUri("http://uri");
         concepts.addConcept(concept);
-        when(dao.suggest(eq("sec"))).thenReturn(Optional.of(concepts));
+        when(dao.suggest(eq("sec"), any(Integer.class), any(Integer.class))).thenReturn(Optional.of(concepts));
     }
 
     @Test
     public void testSuggestConcepts() {
         SkosConcepts result = resources.client().resource("/suggest?q=sec").get(SkosConcepts.class);
         assertEquals(result, concepts);
-        verify(dao).suggest("sec");
+        verify(dao).suggest("sec", 1, 20);
     }
 }
