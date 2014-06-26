@@ -11,6 +11,7 @@ import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
 import uk.ac.ox.it.skossuggester.representations.SkosConcept;
 import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 import static org.junit.Assert.*;
+import uk.ac.ox.it.skossuggester.representations.hal.HalRepresentation;
 
 /**
  *
@@ -42,25 +43,27 @@ public class SearchTest {
 
     @Test
     public void testSearchConcepts() {
-        SkosConcepts result = resources.client().resource("/search?q=encryption").get(SkosConcepts.class);
-        assertEquals(result, concepts);
+        HalRepresentation result = resources.client().resource("/search?q=encryption").get(HalRepresentation.class);
+        SkosConcepts skos = result.getEmbedded();
+        assertEquals(skos, concepts);
         verify(dao).search("encryption", 0, 20);
     }
     
     @Test
     public void testNoResults() {
-        SkosConcepts result = resources.client().resource("/search?q=lalala").get(SkosConcepts.class);
-        assertEquals(result, new SkosConcepts());   // empty result set
+        HalRepresentation result = resources.client().resource("/search?q=lalala").get(HalRepresentation.class);
+        SkosConcepts skos = result.getEmbedded();
+        assertEquals(skos, new SkosConcepts());   // empty result set
         verify(dao).search("lalala", 0, 20);
     }
     
     @Test
     public void testSearchPagination() {
-        resources.client().resource("/search?q=encryption&page=2&count=2").get(SkosConcepts.class);
+        resources.client().resource("/search?q=encryption&page=2&count=2").get(HalRepresentation.class);
         verify(dao).search("encryption", 2, 2);
-        resources.client().resource("/search?q=encryption&page=1&count=10").get(SkosConcepts.class);
+        resources.client().resource("/search?q=encryption&page=1&count=10").get(HalRepresentation.class);
         verify(dao).search("encryption", 0, 10);
-        resources.client().resource("/search?q=encryption&page=2&count=10").get(SkosConcepts.class);
+        resources.client().resource("/search?q=encryption&page=2&count=10").get(HalRepresentation.class);
         verify(dao).search("encryption", 10, 10);
     }
     

@@ -3,6 +3,7 @@ package uk.ac.ox.it.skossuggester.representations.hal;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
+import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 
 /**
  *
@@ -11,10 +12,10 @@ import java.util.List;
 public class HalRepresentation {
     
     private HalLinks links;
-    private List<Object> embedded;
+    private SkosConcepts concepts;
 
     public HalRepresentation() {
-        this.embedded = new ArrayList<>();
+        this.concepts = new SkosConcepts();
         this.links = new HalLinks();
     }
     
@@ -32,15 +33,12 @@ public class HalRepresentation {
     }
     
     @JsonProperty("_embedded")
-    public List<Object> getEmbedded() {
-        return embedded;
+    public SkosConcepts getEmbedded() {
+        return concepts;
     }
 
-    public void setEmbedded(List<Object> embedded) {
-        this.embedded = embedded;
+    public void setEmbedded(SkosConcepts embedded) {
+        this.concepts = embedded;
     }
     
-    public void addEmbedded(Object embed) {
-        this.embedded.add(embed);
-    }
 }

@@ -10,6 +10,10 @@ public class HalLink {
     
     private String value;
     
+    public HalLink() {
+        
+    }
+    
     public HalLink(String value) {
         this.value = value;
     }

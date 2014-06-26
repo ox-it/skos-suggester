@@ -36,12 +36,12 @@ public class Search {
             Optional<SkosConcepts> concepts = dao.search(query.get(), firstResult, count.get());
             HalRepresentation hal = new HalRepresentation();
             hal.setSelfLink(new HalLink(UriBuilder.fromResource(Search.class).queryParam("q", query.get()).build().toString()));
-            hal.addEmbedded(concepts.or(new SkosConcepts()));
+            hal.setEmbedded(concepts.or(new SkosConcepts()));
             return hal;
         } else {
             HalRepresentation hal = new HalRepresentation();
             hal.setSelfLink(new HalLink(UriBuilder.fromResource(Search.class).queryParam("q", query.get()).build().toString()));
-            hal.addEmbedded(new SkosConcepts());
+            hal.setEmbedded(new SkosConcepts());
             return hal;
         }
     }
