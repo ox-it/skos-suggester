@@ -32,7 +32,7 @@ public class Search {
         // there seem to be some problems upstream in jersey in bean validation
         // so this should be revisited at a later date
         if(query.isPresent()) {
-            int firstResult = (page.get()-1)*count.get();
+            int firstResult = PaginationUtils.getFirstResult(page.get(), count.get());
             Optional<SkosConcepts> concepts = dao.search(query.get(), firstResult, count.get());
             HalRepresentation hal = new HalRepresentation();
             hal.setSelfLink(new HalLink(UriBuilder.fromResource(Search.class).queryParam("q", query.get()).build().toString()));

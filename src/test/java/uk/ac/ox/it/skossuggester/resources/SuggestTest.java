@@ -40,6 +40,6 @@ public class SuggestTest {
     public void testSuggestConcepts() {
         SkosConcepts result = resources.client().resource("/suggest?q=sec").get(SkosConcepts.class);
         assertEquals(result, concepts);
-        verify(dao).suggest("sec", 1, 20);
+        verify(dao).suggest("sec", 0, 20);
     }
 }

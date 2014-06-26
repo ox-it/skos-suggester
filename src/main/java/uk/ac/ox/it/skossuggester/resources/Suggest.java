@@ -24,7 +24,8 @@ public class Suggest {
     public SkosConcepts suggest(@QueryParam("q") String query,
                                 @QueryParam("page") @DefaultValue("1") PositiveIntParam page,
                                 @QueryParam("count") @DefaultValue("20") PositiveIntParam count) {
-        Optional<SkosConcepts> concepts = dao.suggest(query, page.get(), count.get());
+        int firstResult = PaginationUtils.getFirstResult(page.get(), count.get());
+        Optional<SkosConcepts> concepts = dao.suggest(query, firstResult, count.get());
         return concepts.or(new SkosConcepts());
     }
 
