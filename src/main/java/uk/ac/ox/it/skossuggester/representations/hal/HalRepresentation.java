@@ -10,25 +10,25 @@ import java.util.List;
  */
 public class HalRepresentation {
     
-    private List<HalLink> links;
+    private HalLinks links;
     private List<Object> embedded;
 
     public HalRepresentation() {
         this.embedded = new ArrayList<>();
-        this.links = new ArrayList<>();
+        this.links = new HalLinks();
     }
     
     @JsonProperty("_links")
-    public List<HalLink> getLinks() {
+    public HalLinks getLinks() {
         return links;
     }
 
-    public void setLinks(List<HalLink> links) {
+    public void setLinks(HalLinks links) {
         this.links = links;
     }
 
-    public void addLink(HalLink link) {
-        this.links.add(link);
+    public void setSelfLink(HalLink link) {
+        this.links.setSelf(link);
     }
     
     @JsonProperty("_embedded")
