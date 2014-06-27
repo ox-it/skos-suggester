@@ -1,6 +1,7 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -22,6 +23,9 @@ public class Get {
     
     @GET
     public SkosConcept get(@QueryParam("uri") String uri) {
+        Preconditions.checkArgument(uri != null, "'uri' parameter is mandatory");
+        Preconditions.checkArgument(!"".equals(uri), "'uri' parameter cannot be empty");
+
         Optional<SkosConcept> concept = this.dao.get(uri);
         if (concept.isPresent()) {
             return concept.get();

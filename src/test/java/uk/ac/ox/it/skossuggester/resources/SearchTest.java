@@ -1,7 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.google.common.base.Optional;
-import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -25,7 +24,7 @@ public class SearchTest {
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new Search(dao))
             .build();
-
+    
     private SkosConcepts concepts;
     
     @Before
@@ -65,16 +64,5 @@ public class SearchTest {
         verify(dao).search("encryption", 0, 10);
         resources.client().resource("/search?q=encryption&page=2&count=10").get(HalRepresentation.class);
         verify(dao).search("encryption", 10, 10);
-    }
-    
-    @Test
-    public void testPaginationValidation() {
-        ClientResponse response = resources.client()
-                .resource("/search")
-                .queryParam("q", "encryption")
-                .queryParam("page", "0")
-                .queryParam("count", "10")
-                .get(ClientResponse.class);
-        assertEquals(response.getStatus(), 400);
     }
 }
