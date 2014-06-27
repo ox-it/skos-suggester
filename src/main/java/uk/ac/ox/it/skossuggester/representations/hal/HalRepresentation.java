@@ -1,8 +1,6 @@
 package uk.ac.ox.it.skossuggester.representations.hal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
-import java.util.List;
 import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 
 /**
