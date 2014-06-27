@@ -31,18 +31,19 @@ public class Search {
         // TODO better handling of the query
         // there seem to be some problems upstream in jersey in bean validation
         // so this should be revisited at a later date
+        HalRepresentation hal = new HalRepresentation();
+        hal.setSelfLink(new HalLink(UriBuilder.fromResource(Search.class)
+                .queryParam("q", query.get())
+                .queryParam("page", page)
+                .queryParam("count", count)
+                .build().toString()));
         if(query.isPresent()) {
             int firstResult = PaginationUtils.getFirstResult(page.get(), count.get());
             Optional<SkosConcepts> concepts = dao.search(query.get(), firstResult, count.get());
-            HalRepresentation hal = new HalRepresentation();
-            hal.setSelfLink(new HalLink(UriBuilder.fromResource(Search.class).queryParam("q", query.get()).build().toString()));
             hal.setEmbedded(concepts.or(new SkosConcepts()));
-            return hal;
         } else {
-            HalRepresentation hal = new HalRepresentation();
-            hal.setSelfLink(new HalLink(UriBuilder.fromResource(Search.class).queryParam("q", query.get()).build().toString()));
             hal.setEmbedded(new SkosConcepts());
-            return hal;
         }
+        return hal;
     }
 }
