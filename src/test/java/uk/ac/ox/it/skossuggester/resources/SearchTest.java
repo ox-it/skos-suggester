@@ -1,7 +1,11 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.google.common.base.Optional;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -10,6 +14,8 @@ import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
 import uk.ac.ox.it.skossuggester.representations.SkosConcept;
 import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 import static org.junit.Assert.*;
+import uk.ac.ox.it.skossuggester.SkosSuggesterApplication;
+import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 import uk.ac.ox.it.skossuggester.representations.hal.HalRepresentation;
 
 /**
@@ -24,6 +30,11 @@ public class SearchTest {
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new Search(dao))
             .build();
+    
+    @ClassRule
+    public static final DropwizardAppRule<AppConfiguration> RULE = 
+            new DropwizardAppRule<>(SkosSuggesterApplication.class, null);
+
     
     private SkosConcepts concepts;
     
@@ -64,5 +75,27 @@ public class SearchTest {
         verify(dao).search("encryption", 0, 10);
         resources.client().resource("/search?q=encryption&page=2&count=10").get(HalRepresentation.class);
         verify(dao).search("encryption", 10, 10);
+    }
+    
+    @Test
+    public void testPaginationValidation() {
+        Client client = new Client();
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/search", RULE.getLocalPort()))
+                .queryParam("q", "encryption")
+                .queryParam("page", "0")
+                .queryParam("count", "10")
+                .get(ClientResponse.class);
+        assertThat(response.getStatus(), is(400));
+    }
+
+    @Test
+    public void testMissingQuery() {
+        Client client = new Client();
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/search", RULE.getLocalPort()))
+                .get(ClientResponse.class);
+
+        assertThat(response.getStatus(), is(400));
     }
 }
