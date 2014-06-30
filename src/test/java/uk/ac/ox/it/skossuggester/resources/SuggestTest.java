@@ -10,6 +10,7 @@ import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
 import uk.ac.ox.it.skossuggester.representations.SkosConcept;
 import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 import static org.junit.Assert.*;
+import uk.ac.ox.it.skossuggester.representations.hal.HalRepresentation;
 
 /**
  *
@@ -38,8 +39,9 @@ public class SuggestTest {
 
     @Test
     public void testSuggestConcepts() {
-        SkosConcepts result = resources.client().resource("/suggest?q=sec").get(SkosConcepts.class);
-        assertEquals(result, concepts);
-        verify(dao).suggest("sec", 1, 20);
+        HalRepresentation result = resources.client().resource("/suggest?q=sec").get(HalRepresentation.class);
+        SkosConcepts skos = result.getEmbedded();
+        assertEquals(skos, concepts);
+        verify(dao).suggest("sec", 0, 20);
     }
 }

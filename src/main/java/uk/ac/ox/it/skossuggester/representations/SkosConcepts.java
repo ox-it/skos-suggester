@@ -46,7 +46,7 @@ public class SkosConcepts {
         }
         return concepts;
     }
-    
+        
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

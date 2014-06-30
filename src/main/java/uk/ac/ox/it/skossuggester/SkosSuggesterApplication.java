@@ -10,6 +10,7 @@ import uk.ac.ox.it.skossuggester.health.SolrHealth;
 import uk.ac.ox.it.skossuggester.cli.SkosFileImporter;
 import uk.ac.ox.it.skossuggester.cli.TdbImporter;
 import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
+import uk.ac.ox.it.skossuggester.jerseyutils.JsonIllegalArgumentExceptionMapper;
 import uk.ac.ox.it.skossuggester.resources.Get;
 import uk.ac.ox.it.skossuggester.resources.Search;
 import uk.ac.ox.it.skossuggester.resources.Suggest;
@@ -35,6 +36,7 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
         environment.jersey().register(get);
         final SolrHealth solrHealth = new SolrHealth(solr);
         environment.healthChecks().register("solr", solrHealth);
+        environment.jersey().register(new JsonIllegalArgumentExceptionMapper());
     }
     
     public static void main(String[] args) throws Exception {

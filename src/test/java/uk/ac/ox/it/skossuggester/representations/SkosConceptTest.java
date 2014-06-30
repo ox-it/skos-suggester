@@ -47,7 +47,6 @@ public class SkosConceptTest {
         
         ObjectMapper mapper = new ObjectMapper();
         SkosConcept deserialized = mapper.readValue(fixture("fixtures/concept.json"), SkosConcept.class);
-        
         assertEquals(deserialized, concept);
     }
     
