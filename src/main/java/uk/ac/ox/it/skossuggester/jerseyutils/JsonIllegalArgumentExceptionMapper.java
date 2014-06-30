@@ -26,7 +26,6 @@ public class JsonIllegalArgumentExceptionMapper implements ExceptionMapper<Illeg
     
     @Override
     public Response toResponse(IllegalArgumentException error) {
-        LOGGER.error(error.getMessage(), error);
         return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorMessage(error.getMessage())).build();
     }
 }
