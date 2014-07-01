@@ -3,6 +3,9 @@ package uk.ac.ox.it.skossuggester;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import java.util.EnumSet;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
@@ -25,7 +28,13 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
 
     @Override
     public void run(AppConfiguration configuration, Environment environment) throws Exception {
-        environment.servlets().addFilter("/*", CrossOriginFilter.class);
+        // CORS filter configuration
+        FilterRegistration.Dynamic cors = environment.servlets().addFilter("cors", CrossOriginFilter.class);
+        cors.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, "false");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET");
+        
         final HttpSolrServer solr = new HttpSolrServer(configuration.getSolrLocation());
         final SkosConceptsDao dao = new SkosConceptsDao(solr);
         final Suggest suggest = new Suggest(dao);
