@@ -1,5 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
+import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import io.dropwizard.jersey.params.IntParam;
@@ -25,6 +26,7 @@ public class Suggest {
     }
     
     @GET
+    @Timed
     public HalRepresentation suggest(@QueryParam("q") String query,
                                 @QueryParam("page") @DefaultValue("1") IntParam page,
                                 @QueryParam("count") @DefaultValue("20") IntParam count) {

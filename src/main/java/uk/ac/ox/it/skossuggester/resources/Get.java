@@ -1,5 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
+import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import javax.ws.rs.GET;
@@ -22,6 +23,7 @@ public class Get {
     }
     
     @GET
+    @Timed
     public SkosConcept get(@QueryParam("uri") String uri) {
         Preconditions.checkArgument(uri != null, "'uri' parameter is mandatory");
         Preconditions.checkArgument(!"".equals(uri), "'uri' parameter cannot be empty");
