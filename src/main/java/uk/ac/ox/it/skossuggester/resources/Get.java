@@ -3,14 +3,17 @@ package uk.ac.ox.it.skossuggester.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
 import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
-import uk.ac.ox.it.skossuggester.representations.SkosConcept;
+import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
+import uk.ac.ox.it.skossuggester.representations.hal.HalLink;
+import uk.ac.ox.it.skossuggester.representations.hal.HalRepresentation;
 
 @Path("/get")
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,15 +27,19 @@ public class Get {
     
     @GET
     @Timed
-    public SkosConcept get(@QueryParam("uri") String uri) {
-        Preconditions.checkArgument(uri != null, "'uri' parameter is mandatory");
-        Preconditions.checkArgument(!"".equals(uri), "'uri' parameter cannot be empty");
+    public HalRepresentation get(@QueryParam("uri") List<String> uris) {
+        Preconditions.checkArgument(uris != null, "'uri' parameter is mandatory");
+        //Preconditions.checkArgument(!"".equals(uri), "'uri' parameter cannot be empty");
 
-        Optional<SkosConcept> concept = this.dao.get(uri);
-        if (concept.isPresent()) {
-            return concept.get();
-        } else {
-            throw new WebApplicationException(404);
+        Optional<SkosConcepts> concepts = this.dao.get(uris);
+
+        HalRepresentation hal = new HalRepresentation();
+        UriBuilder uri = UriBuilder.fromResource(Search.class);
+        for (String u : uris) {
+            uri.queryParam("uri", u);
         }
+        hal.setSelfLink(new HalLink(uri.build().toString()));
+        hal.setEmbedded(concepts.or(new SkosConcepts()));
+        return hal;
     }
 }

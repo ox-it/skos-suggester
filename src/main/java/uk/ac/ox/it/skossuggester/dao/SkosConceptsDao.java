@@ -1,6 +1,7 @@
 package uk.ac.ox.it.skossuggester.dao;
 
 import com.google.common.base.Optional;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -29,19 +30,28 @@ public class SkosConceptsDao {
     
     /**
      * Get a document by its unique ID
-     * @param uri 
+     * @param uris
      * @return 
      */
-    public Optional<SkosConcept> get(String uri) {
+    public Optional<SkosConcepts> get(List<String> uris) {
         SolrQuery q = new SolrQuery();
         q.setRequestHandler("/get");
-        q.set("id", uri);
+        for(String uri : uris) {
+            q.add("id", uri);        
+        }
         Optional<QueryResponse> rsp = this.doQuery(q);
-        if (rsp.isPresent()) {
-            SolrDocument out = (SolrDocument)rsp.get().getResponse().get("doc");
-            if (out != null) {
-                return Optional.of(SkosConcept.fromSolr(out));
+        
+        if (uris.size() == 1) {
+            if (rsp.isPresent()) {
+                SolrDocument out = (SolrDocument)rsp.get().getResponse().get("doc");
+                if (out != null) {
+                    SkosConcepts concepts = new SkosConcepts();
+                    concepts.addConcept(SkosConcept.fromSolr(out));
+                    return Optional.of(concepts);
+                }
             }
+        } else {
+            return responseToConcepts(rsp);
         }
         return Optional.absent();
     }
@@ -60,13 +70,7 @@ public class SkosConceptsDao {
         q.setStart(start);
         q.setRows(count);
         Optional<QueryResponse> rsp = this.doQuery(q);
-        if(rsp.isPresent()) {
-            SolrDocumentList out = rsp.get().getResults();
-            if (out != null) {
-                return Optional.of(SkosConcepts.fromSolr(out));
-            }
-        }
-        return Optional.absent();
+        return responseToConcepts(rsp);
     }
     
     /**
@@ -85,13 +89,7 @@ public class SkosConceptsDao {
         q.setStart(start);
         q.setRows(count);
         Optional<QueryResponse> rsp = this.doQuery(q);
-        if(rsp.isPresent()) {
-            SolrDocumentList out = rsp.get().getResults();
-            if (out != null) {
-                return Optional.of(SkosConcepts.fromSolr(out));
-            }
-        }
-        return Optional.absent();
+        return responseToConcepts(rsp);
     }
     
     private Optional<QueryResponse> doQuery(SolrQuery query) {
@@ -105,5 +103,16 @@ public class SkosConceptsDao {
             Logger.getLogger(Get.class.getName()).log(Level.SEVERE, null, ex);
         }
         return Optional.absent();
+    }
+
+    private Optional<SkosConcepts> responseToConcepts(Optional<QueryResponse> response) {
+        if(response.isPresent()) {
+            SolrDocumentList out = response.get().getResults();
+            if (out != null) {
+                return Optional.of(SkosConcepts.fromSolr(out));
+            }
+        }
+        return Optional.absent();
+
     }
 }
