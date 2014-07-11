@@ -29,7 +29,6 @@ public class Get {
     @Timed
     public HalRepresentation get(@QueryParam("uri") List<String> uris) {
         Preconditions.checkArgument(uris != null, "'uri' parameter is mandatory");
-        //Preconditions.checkArgument(!"".equals(uri), "'uri' parameter cannot be empty");
 
         Optional<SkosConcepts> concepts = this.dao.get(uris);
 

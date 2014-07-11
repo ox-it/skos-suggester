@@ -30,7 +30,7 @@ public class SkosConceptsDao {
     
     /**
      * Get a document by its unique ID
-     * @param uris
+     * @param uris list of uris
      * @return 
      */
     public Optional<SkosConcepts> get(List<String> uris) {
@@ -41,6 +41,7 @@ public class SkosConceptsDao {
         }
         Optional<QueryResponse> rsp = this.doQuery(q);
         
+        // Solr returns a different response if there is only one document...
         if (uris.size() == 1) {
             if (rsp.isPresent()) {
                 SolrDocument out = (SolrDocument)rsp.get().getResponse().get("doc");
