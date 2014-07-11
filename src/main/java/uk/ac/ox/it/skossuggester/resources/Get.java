@@ -1,7 +1,7 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.base.Preconditions;
 import java.util.List;
 import io.dropwizard.jersey.caching.CacheControl;
@@ -41,7 +41,7 @@ public class Get {
             uri.queryParam("uri", u);
         }
         hal.setSelfLink(new HalLink(uri.build().toString()));
-        hal.setEmbedded(concepts.or(new SkosConcepts()));
+        hal.setEmbedded(concepts.orElse(new SkosConcepts()));
         return hal;
     }
 }

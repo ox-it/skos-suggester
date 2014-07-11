@@ -65,9 +65,9 @@ public class SkosConcept {
         }
 
         if(doc.containsKey("altLabels")) {
-            for(Object o : doc.getFieldValues("altLabels")) {
+            doc.getFieldValues("altLabels").stream().forEach((o) -> {
                 skos.addAltLabel(o.toString());
-            }
+            });
         }
 
         if(doc.containsKey("relatedLabels") && doc.containsKey("relatedUris")) {

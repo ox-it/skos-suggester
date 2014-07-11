@@ -1,6 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -47,7 +47,7 @@ public class SearchTest {
         concepts.addConcept(concept);
         when(dao.search(eq("encryption"), any(Integer.class), any(Integer.class)))
                 .thenReturn(Optional.of(concepts));
-        Optional<SkosConcepts> none = Optional.absent();
+        Optional<SkosConcepts> none = Optional.empty();
         when(dao.search(eq("lalala"), any(Integer.class), any(Integer.class))).thenReturn(none);
     }
 

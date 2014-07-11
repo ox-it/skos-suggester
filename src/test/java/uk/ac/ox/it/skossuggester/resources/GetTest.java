@@ -1,6 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class GetTest {
         validUris.add("http://uri");
         noneUris.add("lalala");
         when(dao.get(eq(validUris))).thenReturn(Optional.of(concepts));
-        Optional<SkosConcepts> none = Optional.absent();
+        Optional<SkosConcepts> none = Optional.empty();
         when(dao.get(eq(noneUris))).thenReturn(none);
     }
 

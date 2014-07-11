@@ -1,6 +1,6 @@
 package uk.ac.ox.it.skossuggester.dao;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,9 +36,8 @@ public class SkosConceptsDao {
     public Optional<SkosConcepts> get(List<String> uris) {
         SolrQuery q = new SolrQuery();
         q.setRequestHandler("/get");
-        for(String uri : uris) {
-            q.add("id", uri);        
-        }
+        uris.stream().forEach((uri) -> { q.add("id", uri); });
+        
         Optional<QueryResponse> rsp = this.doQuery(q);
         
         // Solr returns a different response if there is only one document...
@@ -54,7 +53,7 @@ public class SkosConceptsDao {
         } else {
             return responseToConcepts(rsp);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
     
     /**
@@ -103,7 +102,7 @@ public class SkosConceptsDao {
         } catch (SolrServerException ex) {
             Logger.getLogger(Get.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<SkosConcepts> responseToConcepts(Optional<QueryResponse> response) {
@@ -113,7 +112,7 @@ public class SkosConceptsDao {
                 return Optional.of(SkosConcepts.fromSolr(out));
             }
         }
-        return Optional.absent();
+        return Optional.empty();
 
     }
 }

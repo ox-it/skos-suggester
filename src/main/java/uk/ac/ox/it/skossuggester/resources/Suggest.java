@@ -1,7 +1,7 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.base.Preconditions;
 import io.dropwizard.jersey.caching.CacheControl;
 import io.dropwizard.jersey.params.IntParam;
@@ -42,7 +42,7 @@ public class Suggest {
         Optional<SkosConcepts> concepts = dao.suggest(query, firstResult, count.get());
         HalRepresentation hal = new HalRepresentation();
         hal.setSelfLink(new HalLink(UriBuilder.fromResource(Suggest.class).queryParam("q", query).build().toString()));
-        hal.setEmbedded(concepts.or(new SkosConcepts()));
+        hal.setEmbedded(concepts.orElse(new SkosConcepts()));
         return hal;
     }
 }

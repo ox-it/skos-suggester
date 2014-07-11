@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
@@ -39,9 +40,9 @@ public class Skos {
         
         List<String> altLabels = new ArrayList<>();
         
-        for (Statement s : res.listProperties(skosAltLabel).toList()) {
+        res.listProperties(skosAltLabel).toList().stream().forEach((s) -> {
             altLabels.add(s.getString());
-        }
+        });
 
         doc.addField("altLabels", altLabels);
 
@@ -63,7 +64,7 @@ public class Skos {
                 relatedUris.add(related.getURI());
             }
         }
-
+        
         doc.addField("relatedLabels", relatedLabels);
         doc.addField("relatedUris", relatedUris);
         

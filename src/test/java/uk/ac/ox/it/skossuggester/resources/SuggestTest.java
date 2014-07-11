@@ -1,6 +1,6 @@
 package uk.ac.ox.it.skossuggester.resources;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
