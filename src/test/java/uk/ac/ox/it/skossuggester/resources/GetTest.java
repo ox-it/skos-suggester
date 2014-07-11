@@ -1,18 +1,18 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.google.common.base.Optional;
-import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import java.util.ArrayList;
+import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import uk.ac.ox.it.skossuggester.dao.SkosConceptsDao;
 import uk.ac.ox.it.skossuggester.representations.SkosConcept;
+import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
+import uk.ac.ox.it.skossuggester.representations.hal.HalRepresentation;
 
 /**
  *
@@ -27,29 +27,34 @@ public class GetTest {
             .addResource(new Get(dao))
             .build();
 
-    private SkosConcept concept;
+    private final SkosConcepts concepts = new SkosConcepts();
+    private final List<String> validUris = new ArrayList<>();
+    private final List<String> noneUris = new ArrayList<>();
     
     @Before
     public void setup() {
-        concept = new SkosConcept();
+        SkosConcept concept = new SkosConcept();
         concept.setPrefLabel("PrefLabel");
         concept.setUri("http://uri");
-        when(dao.get(eq("http://uri"))).thenReturn(Optional.of(concept));
-        Optional<SkosConcept> none = Optional.absent();
-        when(dao.get(eq("lalala"))).thenReturn(none);
+        concepts.addConcept(concept);
+        validUris.add("http://uri");
+        noneUris.add("lalala");
+        when(dao.get(eq(validUris))).thenReturn(Optional.of(concepts));
+        Optional<SkosConcepts> none = Optional.absent();
+        when(dao.get(eq(noneUris))).thenReturn(none);
     }
 
     @Test
     public void testGetConcept() {
-        SkosConcept result = resources.client().resource("/get?uri=http://uri").get(SkosConcept.class);
-        assertEquals(result, concept);
-        verify(dao).get("http://uri");
+        HalRepresentation result = resources.client().resource("/get?uri=http://uri").get(HalRepresentation.class);
+        assertEquals(result.getEmbedded(), concepts);
+        verify(dao).get(validUris);
     }
     
     @Test
     public void testNonExistingConcept() {
-        ClientResponse response = resources.client().resource("/get?uri=lalala").get(ClientResponse.class);
-        assertEquals(response.getStatus(), 404);
-        verify(dao).get("lalala");
+        HalRepresentation response = resources.client().resource("/get?uri=lalala").get(HalRepresentation.class);
+        assertEquals(response.getEmbedded().getConcepts().size(), 0);
+        verify(dao).get(noneUris);
     }
 }
