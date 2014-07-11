@@ -4,6 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import java.util.List;
+import io.dropwizard.jersey.caching.CacheControl;
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,12 +22,13 @@ import uk.ac.ox.it.skossuggester.representations.hal.HalRepresentation;
 public class Get {
 
     private final SkosConceptsDao dao;
-    
+
     public Get(SkosConceptsDao dao) {
         this.dao = dao;
     }
-    
+
     @GET
+    @CacheControl(maxAge = 1, maxAgeUnit = TimeUnit.HOURS)
     @Timed
     public HalRepresentation get(@QueryParam("uri") List<String> uris) {
         Preconditions.checkArgument(uris != null, "'uri' parameter is mandatory");

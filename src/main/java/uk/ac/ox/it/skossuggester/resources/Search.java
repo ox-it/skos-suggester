@@ -3,7 +3,9 @@ package uk.ac.ox.it.skossuggester.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import io.dropwizard.jersey.caching.CacheControl;
 import io.dropwizard.jersey.params.IntParam;
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,6 +29,7 @@ public class Search {
     }
     
     @GET
+    @CacheControl(maxAge = 1, maxAgeUnit = TimeUnit.HOURS)
     @Timed
     public HalRepresentation search(@QueryParam("q") String query,
                                @QueryParam("page") @DefaultValue("1") IntParam page,
