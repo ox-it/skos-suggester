@@ -3,6 +3,8 @@ package uk.ac.ox.it.skossuggester.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import io.dropwizard.jersey.caching.CacheControl;
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,6 +25,7 @@ public class Get {
     }
     
     @GET
+    @CacheControl(maxAge = 1, maxAgeUnit = TimeUnit.HOURS)
     @Timed
     public SkosConcept get(@QueryParam("uri") String uri) {
         Preconditions.checkArgument(uri != null, "'uri' parameter is mandatory");
