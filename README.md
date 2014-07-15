@@ -41,3 +41,11 @@ Examples
 `GET /search?q=ontology`
 
 `GET /concept?uri=http://concept-uri`
+
+Docker
+------
+
+Build the image by running `docker build -t skos-solr .` at the root of the repository (assuming you have docker.io installed).
+
+Start the container by running `docker run -d -p 8983:8983 skos-solr`.
+
