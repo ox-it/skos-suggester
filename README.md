@@ -49,3 +49,5 @@ Build the image by running `docker build -t skos-solr .` at the root of the repo
 
 Start the container by running `docker run -d -p 8983:8983 skos-solr`.
 
+Or alternatively, if you have `fig` installed, just run `fig up`.
+
