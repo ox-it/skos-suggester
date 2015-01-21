@@ -28,6 +28,15 @@ Importing a SKOS file
 
 After having packaged the application, run `java -jar target/skos-suggester-1.0-SNAPSHOT.jar skosimport -f [path to your file] [path to your configuration file]`. `-f` is the location of the SKOS file to import, use `--format` to override the default format (N-TRIPLES).
 
+Automatically deploy the latest FAST topics
+-------------------------------------------
+
+See `fabfile.py` (requires Fabric, see `requirements.txt`, install it using `pip install -r requirements.txt`).
+
+Running `fab ENV update_topics` should automate the whole process of importing the latest FAST topics.
+
+The script assumes that `unzip` and `tdbloader2` are installed.
+
 Tests
 -----
 
@@ -50,4 +59,3 @@ Build the image by running `docker build -t skos-solr .` at the root of the repo
 Start the container by running `docker run -d -p 8983:8983 skos-solr`.
 
 Or alternatively, if you have `fig` installed, just run `fig up`.
-
