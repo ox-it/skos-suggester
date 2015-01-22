@@ -8,6 +8,8 @@ HalLinks
 
 .. java:type:: public class HalLinks
 
+   Represents a collection of HAL Link
+
    :author: martinfilliau
 
 Methods

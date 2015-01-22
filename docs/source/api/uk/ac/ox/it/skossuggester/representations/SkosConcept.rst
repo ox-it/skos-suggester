@@ -14,6 +14,10 @@ SkosConcept
 
 .. java:type:: public class SkosConcept
 
+   Represents a skos:concept
+
+   :author: martinfilliau
+
 Constructors
 ------------
 SkosConcept
@@ -30,11 +34,19 @@ addAltLabel
 .. java:method:: public void addAltLabel(String label)
    :outertype: SkosConcept
 
+   Add an alternative label to the concept
+
+   :param label: String
+
 addRelated
 ^^^^^^^^^^
 
 .. java:method:: public void addRelated(Related related)
    :outertype: SkosConcept
+
+   Add a Related concept to the concept
+
+   :param related: Related
 
 equals
 ^^^^^^
@@ -47,6 +59,11 @@ fromSolr
 
 .. java:method:: public static SkosConcept fromSolr(SolrDocument doc)
    :outertype: SkosConcept
+
+   Get a SkosConcept from a SolrDocument
+
+   :param doc: SolrDocument
+   :return: SkosConcept
 
 getAltLabels
 ^^^^^^^^^^^^

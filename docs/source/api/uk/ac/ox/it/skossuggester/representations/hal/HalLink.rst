@@ -8,6 +8,8 @@ HalLink
 
 .. java:type:: public class HalLink
 
+   Represents a HAL link
+
    :author: martinfilliau
 
 Constructors

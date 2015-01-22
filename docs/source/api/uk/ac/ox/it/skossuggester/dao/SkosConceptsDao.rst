@@ -8,11 +8,11 @@
 
 .. java:import:: org.apache.solr.client.solrj SolrQuery
 
+.. java:import:: org.apache.solr.client.solrj SolrServer
+
 .. java:import:: org.apache.solr.client.solrj SolrServerException
 
 .. java:import:: org.apache.solr.client.solrj.impl BinaryResponseParser
-
-.. java:import:: org.apache.solr.client.solrj.impl HttpSolrServer
 
 .. java:import:: org.apache.solr.client.solrj.request QueryRequest
 
@@ -36,6 +36,8 @@ SkosConceptsDao
 
 .. java:type:: public class SkosConceptsDao
 
+   Encapsulates all queries to Solr
+
    :author: martinfilliau
 
 Constructors
@@ -43,8 +45,12 @@ Constructors
 SkosConceptsDao
 ^^^^^^^^^^^^^^^
 
-.. java:constructor:: public SkosConceptsDao(HttpSolrServer solr)
+.. java:constructor:: public SkosConceptsDao(SolrServer solr)
    :outertype: SkosConceptsDao
+
+   Constructor for SkosConceptsDao
+
+   :param solr: Instance of SolrServer (e.g. HttpSolrServer)
 
 Methods
 -------
@@ -54,9 +60,10 @@ get
 .. java:method:: public Optional<SkosConcepts> get(List<String> uris)
    :outertype: SkosConceptsDao
 
-   Get a document by its unique ID
+   Get documents by their unique IDs
 
-   :param uris: list of uris
+   :param uris: list of URIs
+   :return: SkosConcepts or absent
 
 search
 ^^^^^^
@@ -69,7 +76,7 @@ search
    :param query: string to search
    :param start: first document to retrieve
    :param count: number of documents to retrieve
-   :return: SkosConcepts
+   :return: SkosConcepts or absent
 
 suggest
 ^^^^^^^
@@ -77,10 +84,10 @@ suggest
 .. java:method:: public Optional<SkosConcepts> suggest(String query, Integer start, Integer count)
    :outertype: SkosConceptsDao
 
-   Search for documents by a query string
+   Search for documents by a query string Use the "suggest" handler which provides a light response
 
    :param query: string to search
    :param start: first document to retrieve
    :param count: number of documents to retrieve
-   :return: SkosConcepts
+   :return: SkosConcepts or absent
 

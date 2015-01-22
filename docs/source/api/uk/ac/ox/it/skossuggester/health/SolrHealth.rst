@@ -1,6 +1,6 @@
 .. java:import:: com.codahale.metrics.health HealthCheck
 
-.. java:import:: org.apache.solr.client.solrj.impl HttpSolrServer
+.. java:import:: org.apache.solr.client.solrj SolrServer
 
 .. java:import:: org.apache.solr.client.solrj.response SolrPingResponse
 
@@ -12,12 +12,16 @@ SolrHealth
 
 .. java:type:: public class SolrHealth extends HealthCheck
 
+   Health check
+
+   :author: martinfilliau
+
 Constructors
 ------------
 SolrHealth
 ^^^^^^^^^^
 
-.. java:constructor:: public SolrHealth(HttpSolrServer solr)
+.. java:constructor:: public SolrHealth(SolrServer solr)
    :outertype: SolrHealth
 
 Methods

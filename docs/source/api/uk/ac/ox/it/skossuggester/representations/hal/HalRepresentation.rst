@@ -10,6 +10,8 @@ HalRepresentation
 
 .. java:type:: public class HalRepresentation
 
+   Represents a HAL representation
+
    :author: martinfilliau
 
 Constructors

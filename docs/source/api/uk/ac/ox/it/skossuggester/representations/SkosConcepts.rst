@@ -18,6 +18,10 @@ SkosConcepts
 
 .. java:type:: public class SkosConcepts
 
+   Represents a list of SkosConcept
+
+   :author: martinfilliau
+
 Constructors
 ------------
 SkosConcepts
@@ -55,6 +59,11 @@ fromSolr
 
 .. java:method:: public static SkosConcepts fromSolr(SolrDocumentList docs)
    :outertype: SkosConcepts
+
+   Get SkosConcepts from a SolrDocumentList
+
+   :param docs: SolrDocumentList
+   :return: SkosConcepts
 
 getConcepts
 ^^^^^^^^^^^
