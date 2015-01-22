@@ -20,7 +20,12 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 
-
+/**
+ * Import SKOS concepts from an RDF file
+ * Easier to use than TdbImporter as it does not need
+ * an intermediary Jena TDB store, but might reach memory limits
+ * @author martinfilliau
+ */
 public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     
     public SkosFileImporter() {
@@ -77,7 +82,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
      * @return collection of SolrInputDocument 
      */
     protected Collection<SolrInputDocument> getDocsFromModel(Model m) {
-        Resource topic = m.createResource("http://schema.org/Topic");
+        Resource topic = m.createResource("http://schema.org/Topic");       // TODO URI should not be hard-coded, #reusability
         Collection<SolrInputDocument> documents = new ArrayList<>();
         
         ResIterator it = m.listSubjectsWithProperty(RDF.type, topic);

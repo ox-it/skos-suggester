@@ -11,7 +11,8 @@ import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
 
 /**
- *
+ * Utility methods used by importers
+ * RDF -> SolrDocument
  * @author martinfilliau
  */
 public class Skos {

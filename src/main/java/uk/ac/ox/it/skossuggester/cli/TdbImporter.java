@@ -16,7 +16,9 @@ import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 
 /**
- *
+ * Import SKOS concepts from a Jena TDB store
+ * More robust than SkosFileImporter for big data sets
+ * See http://jena.apache.org/documentation/tdb/
  * @author martinfilliau
  */
 public class TdbImporter extends ConfiguredCommand<AppConfiguration> {
@@ -44,9 +46,9 @@ public class TdbImporter extends ConfiguredCommand<AppConfiguration> {
         File tdbDirectory = (File)namespace.get("tdbDirectory");
         Dataset dataset = TDBFactory.createDataset(tdbDirectory.getAbsolutePath());
         Model tdb = dataset.getDefaultModel();
-        Resource topic = tdb.createResource("http://schema.org/Topic");
+        Resource topic = tdb.createResource("http://schema.org/Topic");     // TODO Topic should not be hard-coded in case it was going to be reused...
         ResIterator it = tdb.listSubjectsWithProperty(RDF.type, topic);
-        
+        // iterate over all topics and add them by batches to Solr
         while (it.hasNext()) {
             solr.add(Skos.getDocument(it.nextResource()));
         }
