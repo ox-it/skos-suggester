@@ -36,7 +36,7 @@ public class Get {
         Optional<SkosConcepts> concepts = this.dao.get(uris);
 
         HalRepresentation hal = new HalRepresentation();
-        UriBuilder uri = UriBuilder.fromResource(Search.class);
+        UriBuilder uri = UriBuilder.fromResource(Get.class);
         for (String u : uris) {
             uri.queryParam("uri", u);
         }
