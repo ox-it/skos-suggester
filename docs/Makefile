@@ -45,6 +45,7 @@ help:
 	@echo "  pseudoxml  to make pseudoxml-XML files for display purposes"
 	@echo "  linkcheck  to check all external links for integrity"
 	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
+	@echo "  javadoc	to build JavaDoc"
 
 clean:
 	rm -rf $(BUILDDIR)/*
@@ -175,3 +176,8 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+javadoc:
+	javasphinx-apidoc -o source/api/ ../src/main/java/uk/ -f
+	@echo "Generated JavaDoc for uk.* packages"
+
