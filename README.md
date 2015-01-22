@@ -51,10 +51,23 @@ To automatically import the latest FAST topics, use the following command:
 
 The script assumes that `unzip` and `tdbloader2` are installed.
 
-Tests
------
+Unit tests
+----------
 
-Run `mvn test` at the root of the project.
+Run at the root of the project:
+
+    mvn test
+
+Load tests
+----------
+
+Basic load testing has been done using [Locust](http://locust.io).
+
+To run the load test, first install it using `pip` and then run:
+
+    locust --hostname "http://127.0.0.1:8080"
+
+See `locustfile.py` at the root of the project for more information.
 
 Docker
 ------
