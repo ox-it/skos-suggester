@@ -1,4 +1,4 @@
-/*
+/**
  * This package contains importers and utilities method to
  * transform SKOS RDF into Solr documents
  */
