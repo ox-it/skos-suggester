@@ -36,6 +36,8 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET");
         
         final HttpSolrServer solr = new HttpSolrServer(configuration.getSolrLocation());
+        solr.setConnectionTimeout(1000);    // 1 second
+        solr.setSoTimeout(1000);    // 1 second
         final SkosConceptsDao dao = new SkosConceptsDao(solr);
         final Suggest suggest = new Suggest(dao);
         final Search search = new Search(dao);
