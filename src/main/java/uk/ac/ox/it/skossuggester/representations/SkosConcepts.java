@@ -8,6 +8,10 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
 
+/**
+ * Represents a list of SkosConcept
+ * @author martinfilliau
+ */
 public class SkosConcepts {
     
     private List<SkosConcept> concepts;
@@ -36,6 +40,11 @@ public class SkosConcepts {
         this.concepts = concepts;
     }
     
+    /**
+     * Get SkosConcepts from a SolrDocumentList
+     * @param docs SolrDocumentList
+     * @return SkosConcepts
+     */
     public static SkosConcepts fromSolr(SolrDocumentList docs) {
         SkosConcepts concepts = new SkosConcepts();
         Iterator<SolrDocument> it = docs.iterator();

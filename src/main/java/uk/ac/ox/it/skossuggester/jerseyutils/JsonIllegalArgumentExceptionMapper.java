@@ -7,9 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Provider
+/**
+ * Maps an IllegalArgumentException to a response HTTP 400 Bad Request
+ */
 public class JsonIllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonIllegalArgumentExceptionMapper.class);
 
     public class ErrorMessage {
         

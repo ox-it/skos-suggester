@@ -5,12 +5,16 @@ import java.util.List;
 import com.google.common.base.Objects;
 import org.apache.solr.common.SolrDocument;
 
+/**
+ * Represents a skos:concept
+ * @author martinfilliau
+ */
 public class SkosConcept {
     
     private String uri;
-    private String prefLabel;
+    private String prefLabel;           // main/preferred label
     private List<String> altLabels;
-    private List<Related> related;
+    private List<Related> related;      // related skos:concepts
 
     public SkosConcept() {
         this.altLabels = new ArrayList<>();
@@ -49,14 +53,27 @@ public class SkosConcept {
         this.related = related;
     }
     
+    /**
+     * Add a Related concept to the concept
+     * @param related Related
+     */
     public void addRelated(Related related) {
         this.related.add(related);
     }
     
+    /**
+     * Add an alternative label to the concept
+     * @param label String
+     */
     public void addAltLabel(String label) {
         this.altLabels.add(label);
     }
-        
+
+    /**
+     * Get a SkosConcept from a SolrDocument
+     * @param doc SolrDocument
+     * @return SkosConcept
+     */
     public static SkosConcept fromSolr(SolrDocument doc) {
         SkosConcept skos = new SkosConcept();
         skos.setUri((String) doc.getFieldValue("uri"));
@@ -70,6 +87,10 @@ public class SkosConcept {
             }
         }
 
+        // related labels and URIs are stored as two multi-values properties
+        // in the same document. There is no explicit ordering, but it should
+        // always be in the same order than originally entered:
+        // hence relatedLabel and relatedUri should be retrieved in the same order
         if(doc.containsKey("relatedLabels") && doc.containsKey("relatedUris")) {
             List<Object> relatedLabels = new ArrayList(doc.getFieldValues("relatedLabels"));
             List<Object> relatedUris = new ArrayList(doc.getFieldValues("relatedUris"));
