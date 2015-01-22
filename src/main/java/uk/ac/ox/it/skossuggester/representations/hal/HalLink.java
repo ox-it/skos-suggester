@@ -3,7 +3,7 @@ package uk.ac.ox.it.skossuggester.representations.hal;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- *
+ * Represents a HAL link
  * @author martinfilliau
  */
 public class HalLink {
