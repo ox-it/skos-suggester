@@ -1,15 +1,18 @@
 package uk.ac.ox.it.skossuggester.health;
 
 import com.codahale.metrics.health.HealthCheck;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.response.SolrPingResponse;
 
-
+/**
+ * Health check
+ * @author martinfilliau
+ */
 public class SolrHealth extends HealthCheck{
 
-    private final HttpSolrServer solr;
+    private final SolrServer solr;
     
-    public SolrHealth(HttpSolrServer solr) {
+    public SolrHealth(SolrServer solr) {
         this.solr = solr;
     }
     

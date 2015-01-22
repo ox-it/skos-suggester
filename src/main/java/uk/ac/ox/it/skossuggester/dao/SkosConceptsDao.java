@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.BinaryResponseParser;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -17,21 +17,25 @@ import uk.ac.ox.it.skossuggester.representations.SkosConcepts;
 import uk.ac.ox.it.skossuggester.resources.Get;
 
 /**
- *
+ * Encapsulates all queries to Solr
  * @author martinfilliau
  */
 public class SkosConceptsDao {
  
-    private final HttpSolrServer solr;
+    private final SolrServer solr;
     
-    public SkosConceptsDao(HttpSolrServer solr) {
+    /**
+     * Constructor for SkosConceptsDao
+     * @param solr Instance of SolrServer (e.g. HttpSolrServer)
+     */
+    public SkosConceptsDao(SolrServer solr) {
         this.solr = solr;
     }
     
     /**
-     * Get a document by its unique ID
-     * @param uris list of uris
-     * @return 
+     * Get documents by their unique IDs
+     * @param uris list of URIs
+     * @return SkosConcepts or absent
      */
     public Optional<SkosConcepts> get(List<String> uris) {
         SolrQuery q = new SolrQuery();
@@ -59,10 +63,11 @@ public class SkosConceptsDao {
     
     /**
      * Search for documents by a query string
+     * Use the "suggest" handler which provides a light response
      * @param query string to search
      * @param start first document to retrieve
      * @param count number of documents to retrieve
-     * @return SkosConcepts
+     * @return SkosConcepts or absent
      */
     public Optional<SkosConcepts> suggest(String query, Integer start, Integer count) {
         SolrQuery q = new SolrQuery();
@@ -79,7 +84,7 @@ public class SkosConceptsDao {
      * @param query string to search
      * @param start first document to retrieve
      * @param count number of documents to retrieve
-     * @return SkosConcepts
+     * @return SkosConcepts or absent
      */
     public Optional<SkosConcepts> search(String query, Integer start, Integer count) {
         SolrQuery q = new SolrQuery();
@@ -93,6 +98,11 @@ public class SkosConceptsDao {
         return responseToConcepts(rsp);
     }
     
+    /**
+     * Do a request to Solr
+     * @param query SolrQuery
+     * @return QueryResponse object or absent
+     */
     private Optional<QueryResponse> doQuery(SolrQuery query) {
         QueryRequest req = new QueryRequest(query);
         req.setResponseParser(new BinaryResponseParser());
@@ -106,6 +116,11 @@ public class SkosConceptsDao {
         return Optional.absent();
     }
 
+    /**
+     * Transforms a SolrDocumentList into a domain object SkosConcepts
+     * @param response QueryResponse (response from Solr)
+     * @return SkosConcepts or absent
+     */
     private Optional<SkosConcepts> responseToConcepts(Optional<QueryResponse> response) {
         if(response.isPresent()) {
             SolrDocumentList out = response.get().getResults();
