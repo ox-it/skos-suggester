@@ -1,10 +1,12 @@
 package uk.ac.ox.it.skossuggester.resources;
 
 import com.google.common.base.Optional;
+import com.google.common.io.Resources;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import java.io.File;
 import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -33,7 +35,7 @@ public class SearchTest {
     
     @ClassRule
     public static final DropwizardAppRule<AppConfiguration> RULE = 
-            new DropwizardAppRule<>(SkosSuggesterApplication.class, null);
+            new DropwizardAppRule<>(SkosSuggesterApplication.class, new File(Resources.getResource("configuration.yml.example").toURI()).getAbsolutePath());
 
     
     private SkosConcepts concepts;
