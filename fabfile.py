@@ -54,6 +54,20 @@ def staging():
     env.tdbloader2_path = '/srv/jena/apache-jena-2.12.1/bin/tdbloader2'
     env.run = run
 
+@task
+def production():
+    """Talks production environment
+    """
+    env.hosts = ['talks-prod.oucs.ox.ac.uk']
+    env.user = 'talks'
+    env.skos_home = '/srv/talks'
+    env.current_skos = '/srv/talks/current_fast_topics.nt'
+    env.tdb_store = '/srv/talks/tdb_store'
+    env.skos_jar = '/srv/talks/skos-suggester-1.0-SNAPSHOT.jar'
+    env.skos_jar_conf_file = '/srv/talks/skos-suggester-configuration.yaml'
+    env.tdbloader2_path = '/srv/jena/apache-jena-2.12.1/bin/tdbloader2'
+    env.run = run
+
 
 """
 Methods
