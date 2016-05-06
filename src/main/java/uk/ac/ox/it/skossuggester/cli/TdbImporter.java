@@ -46,7 +46,7 @@ public class TdbImporter extends ConfiguredCommand<AppConfiguration> {
         File tdbDirectory = (File)namespace.get("tdbDirectory");
         Dataset dataset = TDBFactory.createDataset(tdbDirectory.getAbsolutePath());
         Model tdb = dataset.getDefaultModel();
-        Resource topic = tdb.createResource("http://schema.org/Topic");     // TODO Topic should not be hard-coded in case it was going to be reused...
+        Resource topic = tdb.createResource("http://schema.org/Intangible");     // TODO Topic should not be hard-coded in case it was going to be reused...        
         ResIterator it = tdb.listSubjectsWithProperty(RDF.type, topic);
         // iterate over all topics and add them by batches to Solr
         while (it.hasNext()) {
