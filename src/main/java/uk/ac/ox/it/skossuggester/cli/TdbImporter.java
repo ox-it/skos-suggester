@@ -42,7 +42,7 @@ public class TdbImporter extends ConfiguredCommand<AppConfiguration> {
     
     @Override
     protected void run(Bootstrap<AppConfiguration> btstrp, Namespace namespace, AppConfiguration configuration) throws Exception {
-        ConcurrentUpdateSolrServer solr = new ConcurrentUpdateSolrServer(configuration.getSolrLocation(), 100, 3);
+        ConcurrentUpdateSolrServer solr = new ConcurrentUpdateSolrServer(configuration.getHttpSolr().getSolrLocation(), 100, 3);
         File tdbDirectory = (File)namespace.get("tdbDirectory");
         Dataset dataset = TDBFactory.createDataset(tdbDirectory.getAbsolutePath());
         Model tdb = dataset.getDefaultModel();

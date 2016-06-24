@@ -6,7 +6,7 @@ import io.dropwizard.setup.Environment;
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 import uk.ac.ox.it.skossuggester.health.SolrHealth;
@@ -34,18 +34,17 @@ public class SkosSuggesterApplication extends Application<AppConfiguration>{
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
         cors.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, "false");
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET");
-        
-        final HttpSolrServer solr = new HttpSolrServer(configuration.getSolrLocation());
-        solr.setConnectionTimeout(1000);    // 1 second
-        solr.setSoTimeout(1000);    // 1 second
-        final SkosConceptsDao dao = new SkosConceptsDao(solr);
+
+        final SolrServer solrServer = configuration.getSolrServer(environment);
+
+        final SkosConceptsDao dao = new SkosConceptsDao(solrServer);
         final Suggest suggest = new Suggest(dao);
         final Search search = new Search(dao);
         final Get get = new Get(dao);
         environment.jersey().register(suggest);
         environment.jersey().register(search);
         environment.jersey().register(get);
-        final SolrHealth solrHealth = new SolrHealth(solr);
+        final SolrHealth solrHealth = new SolrHealth(solrServer);
         environment.healthChecks().register("solr", solrHealth);
         environment.jersey().register(new JsonIllegalArgumentExceptionMapper());
     }

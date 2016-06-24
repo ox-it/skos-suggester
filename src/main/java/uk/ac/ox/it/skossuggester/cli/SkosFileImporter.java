@@ -16,7 +16,7 @@ import java.util.Collection;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.common.SolrInputDocument;
 import uk.ac.ox.it.skossuggester.configuration.AppConfiguration;
 
@@ -55,7 +55,7 @@ public class SkosFileImporter extends ConfiguredCommand<AppConfiguration> {
     
     @Override
     protected void run(Bootstrap<AppConfiguration> bootstrap, Namespace namespace, AppConfiguration configuration) throws Exception {
-        HttpSolrServer solr = new HttpSolrServer(configuration.getSolrLocation());
+        SolrServer solr = configuration.getSolrServer(null);
         Collection<SolrInputDocument> documents = this.getDocsFromFile((File)namespace.get("skosFile"),
                 namespace.getString("fileFormat"));
         solr.add(documents);
